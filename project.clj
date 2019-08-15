@@ -22,4 +22,5 @@
              :dev     {:source-paths ["env/dev/clj"]
                        :repl-options {:init-ns user}
                        :dependencies [[org.clojure/tools.namespace "0.3.1"]
-                                      [expound "0.7.2"]]}})
+                                      [expound "0.7.2"]
+                                      [com.datomic/datomic-free "0.9.5697"]]}})

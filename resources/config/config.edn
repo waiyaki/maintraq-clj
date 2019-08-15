@@ -1,1 +1,5 @@
-{}
+{:datomic {:uri #or [#env DATOMIC_URI
+                     #ref [:secrets :datomic :uri]
+                     "datomic:free://localhost:4224/maintraq"]}
+
+ :secrets #include #join [#env HOME "/.clj-secrets.edn"]}

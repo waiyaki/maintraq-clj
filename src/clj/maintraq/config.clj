@@ -13,3 +13,7 @@
 
 (defstate config
   :start (read-config))
+
+
+(defn datomic-uri [config]
+  (get-in config [:datomic :uri]))

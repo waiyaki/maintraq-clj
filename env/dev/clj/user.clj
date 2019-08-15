@@ -4,7 +4,6 @@
    [clojure.tools.namespace.repl :refer [refresh]]
    [expound.alpha :as expound]
    [mount.core :as mount]
-
    [maintraq.config]))
 
 
@@ -16,9 +15,8 @@
 
 
 (defn go! []
-  (start)
   (set! s/*explain-out* expound/printer)
-  :ready)
+  (start))
 
 
 (defn reset []
