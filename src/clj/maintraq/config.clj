@@ -17,3 +17,7 @@
 
 (defn datomic-uri [config]
   (get-in config [:datomic :uri]))
+
+
+(defn server-port [config]
+  (get-in config [:server :port]))

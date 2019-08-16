@@ -4,7 +4,7 @@
    [clojure.tools.namespace.repl :refer [refresh]]
    [expound.alpha :as expound]
    [mount.core :as mount]
-   [maintraq.config]))
+   [maintraq.core :refer [start-app]]))
 
 
 (defn start []

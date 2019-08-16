@@ -1,5 +1,6 @@
 {:datomic {:uri #or [#env DATOMIC_URI
                      #ref [:secrets :datomic :uri]
-                     "datomic:free://localhost:4224/maintraq"]}
+                     "datomic:mem://localhost:4224/maintraq"]}
 
+ :server  {:port #or [#env WEB_PORT 3009]}
  :secrets #include #join [#env HOME "/.clj-secrets.edn"]}
