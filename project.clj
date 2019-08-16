@@ -6,6 +6,7 @@
   :dependencies [[org.clojure/clojure "1.10.1"]
                  [org.clojure/tools.cli "0.4.2"]
                  [aero "1.1.3"]
+                 [com.datomic/datomic-free "0.9.5697"]
                  [mount "0.1.16"]
                  [metosin/reitit "0.3.9"]
                  [metosin/muuntaja "0.6.4"]
@@ -28,5 +29,4 @@
                        :repl-options {:init-ns user}
                        :dependencies [[org.clojure/tools.namespace "0.3.1"]
                                       [expound "0.7.2"]
-                                      [com.datomic/datomic-free "0.9.5697"]
                                       [ring/ring-devel "1.7.1"]]}})
