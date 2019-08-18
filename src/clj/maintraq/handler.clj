@@ -32,9 +32,7 @@
                              coercion/coerce-response-middleware
                              ;; coercing request parameters
                              coercion/coerce-request-middleware]}
-               ["" {:get {:handler hello}}]]])
-           (ring/routes
-             (ring/create-default-handler))))
+               ["" {:get {:handler hello}}]]])))
 
 
 (defn app []
