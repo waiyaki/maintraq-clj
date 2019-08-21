@@ -2,12 +2,17 @@
   (:require
    [datomic.api :as d]
    [mount.core :refer [defstate]]
-   [maintraq.config :as config :refer [config]]))
+   [maintraq.config :as config :refer [config]]
+   [maintraq.db.schema :as schema]
+   [taoensso.timbre :as timbre]))
 
 
 (defn connect! [uri]
+  (timbre/info ::connecting {:uri uri})
   (d/create-database uri)
-  (d/connect uri))
+  (let [conn (d/connect uri)]
+    (schema/conform-schema! conn)
+    conn))
 
 
 (defstate conn

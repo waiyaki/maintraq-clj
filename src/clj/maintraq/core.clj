@@ -7,6 +7,7 @@
    [maintraq.server :as server]
    [maintraq.handler :as handler]
    [maintraq.config :as config :refer [config]]
+   [maintraq.db.core]
    [taoensso.timbre :as timbre]))
 
 

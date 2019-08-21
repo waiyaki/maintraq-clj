@@ -7,6 +7,8 @@
                  [org.clojure/tools.cli "0.4.2"]
                  [aero "1.1.3"]
                  [com.datomic/datomic-free "0.9.5697"]
+                 [datomic-schema "1.3.0"]
+                 [io.rkn/conformity "0.5.1"]
                  [mount "0.1.16"]
                  [metosin/reitit "0.3.9"]
                  [metosin/muuntaja "0.6.4"]
