@@ -1,0 +1,42 @@
+{:enums
+ {:role
+  {:description "User account roles"
+   :values      [:admin :member :maintenance]}}
+
+
+ :objects
+ {:User
+  {:description "A user account registered in MainTraq."
+   :fields
+   {:id          {:type        (non-null :ID)
+                  :description "Unique ID for this user."
+                  :resolve     (:get :db/id)}
+    :email       {:type        (non-null :String)
+                  :description "Unique email associated with this user."
+                  :resolve     (:get :user/email)}
+    :username    {:type        (non-null :String)
+                  :description "Unique username associated with this user."
+                  :resolve     (:get :user/username)}
+    :first_name  {:type        :String
+                  :description "User's first name, if available."
+                  :resolve     (:get :user/first-name)}
+    :middle_name {:type        :String
+                  :description "User's middle name, if available."
+                  :resolve     (:get :user/middle-name)}
+    :last_name   {:type        :String
+                  :description "User's last name, if available."
+                  :resolve     (:get :user/last-name)}
+    :full_name   {:type        :String
+                  :description "User's full name, composed of their first, middle and last names, if available."
+                  :resolve     :user/full-name}
+    :activated   {:type        (non-null :Boolean)
+                  :description "Activation status of this user account."
+                  :resolve     (:get :user/activated)}
+    :role        {:type        (non-null :role)
+                  :description "This user's account role."
+                  :resolve     :user/role}}}}
+
+ :queries
+ {:user_by_id {:type    :User
+               :args    {:id {:type (non-null ID)}}
+               :resolve :user/user-by-id}}}
