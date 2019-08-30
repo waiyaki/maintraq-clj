@@ -28,15 +28,16 @@
                   :resolve     (:get :user/last-name)}
     :full_name   {:type        :String
                   :description "User's full name, composed of their first, middle and last names, if available."
-                  :resolve     :user/full-name}
+                  :resolve     :users/full-name}
     :activated   {:type        (non-null :Boolean)
                   :description "Activation status of this user account."
                   :resolve     (:get :user/activated)}
     :role        {:type        (non-null :role)
                   :description "This user's account role."
-                  :resolve     :user/role}}}}
+                  :resolve     :users/role}}}}
 
  :queries
- {:user_by_id {:type    :User
-               :args    {:id {:type (non-null ID)}}
-               :resolve :user/user-by-id}}}
+ {:user {:type        :User
+         :description "Query a single user by their unique identifier."
+         :args        {:id {:type (non-null ID)}}
+         :resolve     :users/retrieve}}}

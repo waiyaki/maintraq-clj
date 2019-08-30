@@ -4,7 +4,7 @@
 
 
 (defn role [_ _ user]
-  (:user/role user))
+  (name (:user/role user)))
 
 
 (defn full-name [_ _ user]
@@ -15,13 +15,14 @@
        not-empty))
 
 
-(defn user-by-id [_ args _]
+(defn retrieve [_ args _]
   {:user/username   "waiyaki"
    :user/first-name "James"
-   :user/last-name  "Muturi"})
+   :user/last-name  "Muturi"
+   :user/role       :user.role/admin})
 
 
 (def resolvers
-  {:user/full-name  full-name
-   :user/role       role
-   :user/user-by-id user-by-id})
+  {:users/full-name full-name
+   :users/role      role
+   :users/retrieve  retrieve})

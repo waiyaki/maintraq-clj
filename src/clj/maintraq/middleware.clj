@@ -19,6 +19,6 @@
 (defn wrap-base [handler]
   (-> handler
       (logger/wrap-with-logger {:log-fn (fn [{:keys [level throwable message]}]
-                                           (timbre/log level throwable message))})
+                                          (timbre/log level throwable message))})
       env/wrap-env
       (wrap-defaults api-defaults)))
