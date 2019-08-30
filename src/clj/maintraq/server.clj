@@ -7,10 +7,10 @@
 (defn start [{:keys [handler port] :as opts}]
   (try
     (let [server (run-jetty
-                   handler
-                   (-> opts
-                     (dissoc :handler)
-                     (assoc :join? false)))]
+                  handler
+                  (-> opts
+                      (dissoc :handler)
+                      (assoc :join? false)))]
       (timbre/info "Server started on port" port)
       server)
     (catch Throwable t

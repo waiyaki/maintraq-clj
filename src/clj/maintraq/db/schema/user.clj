@@ -15,7 +15,7 @@
   (mapv (fn [role]
           {:db/id    (partition/tempid :db.part/db)
            :db/ident role})
-    user-roles))
+        user-roles))
 
 
 (def ^{:schema   ::add-user
@@ -23,23 +23,24 @@
        :doc      "User schema"}
   user
   (datomic.schema/generate-schema
-    [(schema user
-       (fields
-         [email :string :unique-identity :indexed]
-         [username :string :unique-identity :indexed]
-         [first-name :string :indexed]
-         [middle-name :string :indexed]
-         [last-name :string :indexed]
+   [(schema
+     user
+     (fields
+      [email :string :unique-identity :indexed]
+      [username :string :unique-identity :indexed]
+      [first-name :string :indexed]
+      [middle-name :string :indexed]
+      [last-name :string :indexed]
 
-         [password :string
-          "User's hashed password"]
+      [password :string
+       "User's hashed password"]
 
-         [activation-hash :string
-          "User's activation  hash, generated at signup."]
+      [activation-hash :string
+       "User's activation  hash, generated at signup."]
 
-         [activated :boolean
-          "User's activation status, true after activation."]
+      [activated :boolean
+       "User's activation status, true after activation."]
 
-         [role :enum
-          "Role of this user account."]))]
-    {:index-all? true}))
+      [role :enum
+       "Role of this user account."]))]
+   {:index-all? true}))

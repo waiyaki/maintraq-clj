@@ -16,5 +16,5 @@
 
 (defn wrap-base [handler]
   (-> handler
-    env/wrap-env
-    (wrap-defaults api-defaults)))
+      env/wrap-env
+      (wrap-defaults api-defaults)))

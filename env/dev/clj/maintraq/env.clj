@@ -5,4 +5,4 @@
 
 (defn wrap-env [handler]
   (-> handler
-    wrap-reload))
+      wrap-reload))

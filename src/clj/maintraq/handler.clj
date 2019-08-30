@@ -16,30 +16,30 @@
 
 (defstate app-routes
   :start (ring/ring-handler
-           (ring/router
-            [["/api"
-              {:muuntaja   middleware/formats
-               :middleware [;; query-params & form-params
-                            parameters/parameters-middleware
-                            ;; content-negotiation
-                            muuntaja/format-negotiate-middleware
-                            ;; encoding response body
-                            muuntaja/format-response-middleware
-                            ;; exception handling
-                            middleware/exception-middleware
-                            ;; decoding request body
-                            muuntaja/format-request-middleware
-                            ;; coercing response bodys
-                            coercion/coerce-response-middleware
-                            ;; coercing request parameters
-                            coercion/coerce-request-middleware]}
-              ["" {:get {:handler hello}}]
-              ["/graphql" {:post {:handler graphql/handler}}]]])
-           (ring/routes
-            (ring/create-resource-handler
-             {:path        "/"
-              :index-files ["graphiql.html"]})
-            (ring/create-default-handler))))
+          (ring/router
+           [["/api"
+             {:muuntaja   middleware/formats
+              :middleware [;; query-params & form-params
+                           parameters/parameters-middleware
+                           ;; content-negotiation
+                           muuntaja/format-negotiate-middleware
+                           ;; encoding response body
+                           muuntaja/format-response-middleware
+                           ;; exception handling
+                           middleware/exception-middleware
+                           ;; decoding request body
+                           muuntaja/format-request-middleware
+                           ;; coercing response bodys
+                           coercion/coerce-response-middleware
+                           ;; coercing request parameters
+                           coercion/coerce-request-middleware]}
+             ["" {:get {:handler hello}}]
+             ["/graphql" {:post {:handler graphql/handler}}]]])
+          (ring/routes
+           (ring/create-resource-handler
+            {:path        "/"
+             :index-files ["graphiql.html"]})
+           (ring/create-default-handler))))
 
 
 (defn app []

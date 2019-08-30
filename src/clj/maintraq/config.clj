@@ -6,9 +6,10 @@
 
 
 (defn- read-config [& [env]]
-  (aero/read-config (io/resource "config/config.edn")
-    {:resolver aero/root-resolver
-     :profile (or env (:env (mount/args)))}))
+  (aero/read-config
+   (io/resource "config/config.edn")
+   {:resolver aero/root-resolver
+    :profile (or env (:env (mount/args)))}))
 
 
 (defstate config
