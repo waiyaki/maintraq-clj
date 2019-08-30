@@ -14,6 +14,7 @@
                  [metosin/muuntaja "0.6.4"]
                  [ring/ring-jetty-adapter "1.7.1"]
                  [ring/ring-defaults "0.3.2"]
+                 [ring-logger "1.0.1"]
                  [com.taoensso/timbre "4.10.0"]
                  [com.walmartlabs/lacinia "0.34.0"]]
 

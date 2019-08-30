@@ -1,5 +1,6 @@
 (ns maintraq.handler
   (:require
+   [clojure.java.io :as io]
    [mount.core :as mount :refer [defstate]]
    [reitit.ring :as ring]
    [reitit.ring.coercion :as coercion]
@@ -14,10 +15,17 @@
    :body   {:message "Hello, world!"}})
 
 
+(defn graphiql [req]
+  {:status  200
+   :headers {"Content-Type" "text/html"}
+   :body    (slurp (io/resource "public/graphiql.html"))})
+
+
 (defstate app-routes
   :start (ring/ring-handler
           (ring/router
-           [["/api"
+           [["/graphiql" {:get {:handler graphiql}}]
+            ["/api"
              {:muuntaja   middleware/formats
               :middleware [;; query-params & form-params
                            parameters/parameters-middleware
@@ -34,12 +42,7 @@
                            ;; coercing request parameters
                            coercion/coerce-request-middleware]}
              ["" {:get {:handler hello}}]
-             ["/graphql" {:post {:handler graphql/handler}}]]])
-          (ring/routes
-           (ring/create-resource-handler
-            {:path        "/"
-             :index-files ["graphiql.html"]})
-           (ring/create-default-handler))))
+             ["/graphql" {:post {:handler graphql/handler}}]]])))
 
 
 (defn app []

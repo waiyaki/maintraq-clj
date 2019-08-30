@@ -1,1 +1,2 @@
-((clojure-mode . ((clojure-indent-style . always-align))))
+((clojure-mode . ((clojure-indent-style . always-align)
+                  (aggressive-indent-global-mode t))))

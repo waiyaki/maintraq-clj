@@ -27,7 +27,5 @@
 
 
 (defn handler [req]
-  (println "Handling..." (keys req))
-
   {:status 200
    :body (execute compiled-schema (-> req :body slurp) nil nil)})
