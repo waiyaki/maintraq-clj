@@ -33,4 +33,5 @@
                        :repl-options {:init-ns user}
                        :dependencies [[org.clojure/tools.namespace "0.3.1"]
                                       [expound "0.7.2"]
-                                      [ring/ring-devel "1.7.1"]]}})
+                                      [ring/ring-devel "1.7.1"]
+                                      [faker "0.2.2"]]}})
