@@ -9,11 +9,29 @@
    [maintraq.graphql.resolvers.user :as user]))
 
 
+(defn parse-scalar
+  "Wrap a custom scalar parsing function in a try-catch, returning nil in case
+  of an error in accordance to Lacinia's flow"
+  [f]
+  (fn [v]
+    (try
+      (f v)
+      (catch Throwable _
+        nil))))
+
+
+(def custom-scalars
+  {:scalars
+   {:Long {:parse     (parse-scalar #(Long. %))
+           :serialize (parse-scalar #(Long. %))}}})
+
+
 (defstate compiled-schema
   :start (-> "graphql/schema.edn"
              io/resource
              slurp
              edn/read-string
+             (merge custom-scalars)
              (util/attach-resolvers
               (merge {:get (fn [& ks]
                              (fn [_ _ v]
@@ -22,10 +40,15 @@
              schema/compile))
 
 
+(defn ->context [req]
+  {:deps (:deps req)
+   :conn (-> req :deps :conn)})
+
+
 (defn execute [schema query-string variables context]
   (lacinia/execute schema query-string variables context))
 
 
 (defn handler [req]
   {:status 200
-   :body (execute compiled-schema (-> req :body slurp) nil nil)})
+   :body (execute compiled-schema (-> req :body slurp) nil (->context req))})

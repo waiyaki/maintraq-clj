@@ -1,6 +1,7 @@
 (ns maintraq.graphql.resolvers.user
   (:require
-   [clojure.string :as str]))
+   [clojure.string :as str]
+   [datomic.api :as d]))
 
 
 (defn role [_ _ user]
@@ -15,11 +16,8 @@
        not-empty))
 
 
-(defn retrieve [_ args _]
-  {:user/username   "waiyaki"
-   :user/first-name "James"
-   :user/last-name  "Muturi"
-   :user/role       :user.role/admin})
+(defn retrieve [{:keys [conn] :as ctx} {:keys [id] :as args} _]
+  (d/entity (d/db conn) id))
 
 
 (def resolvers

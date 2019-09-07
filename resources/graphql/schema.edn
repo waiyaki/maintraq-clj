@@ -8,7 +8,7 @@
  {:User
   {:description "A user account registered in MainTraq."
    :fields
-   {:id          {:type        (non-null :ID)
+   {:id          {:type        (non-null :Long)
                   :description "Unique ID for this user."
                   :resolve     (:get :db/id)}
     :email       {:type        (non-null :String)
@@ -39,5 +39,5 @@
  :queries
  {:user {:type        :User
          :description "Query a single user by their unique identifier."
-         :args        {:id {:type (non-null ID)}}
+         :args        {:id {:type (non-null :Long)}}
          :resolve     :users/retrieve}}}
