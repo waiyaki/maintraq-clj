@@ -35,7 +35,7 @@
       [password :string
        "User's hashed password"]
 
-      [activation-hash :string
+      [activation-hash :uuid
        "User's activation  hash, generated at signup."]
 
       [activated :boolean

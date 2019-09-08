@@ -19,7 +19,7 @@
              :user/first-name      first-name
              :user/last-name       (or last-name (faker.name/last-name))
              :user/activated       (or activated true)
-             :user/activation-hash (or activation-hash (str (d/squuid)))
+             :user/activation-hash (or activation-hash (d/squuid))
              :user/role            (or role :user.role/member)}
             (when (some? middle-name)
               {:user/middle-name middle-name})))))
