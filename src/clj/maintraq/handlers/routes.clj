@@ -42,4 +42,5 @@
                            ;; coercing request parameters
                            coercion/coerce-request-middleware]}
              ["" {:get {:handler hello}}]
-             ["/graphql" {:post {:handler graphql/handler}}]]])))
+             ["/graphql" {:post {:handler graphql/handler}}]]])
+          (ring/create-default-handler)))
