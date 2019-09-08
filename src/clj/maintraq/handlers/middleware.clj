@@ -1,4 +1,4 @@
-(ns maintraq.middleware
+(ns maintraq.handlers.middleware
   (:require
    [muuntaja.core :as m]
    [ring.middleware.defaults :refer [wrap-defaults api-defaults]]
@@ -10,7 +10,14 @@
 
 
 (def exception-middleware
-  (exception/create-exception-middleware exception/default-handlers))
+  (exception/create-exception-middleware
+   (merge exception/default-handlers
+          {::exception/default
+           (fn [^Exception e _]
+             (timbre/error e ::error)
+             {:status 500
+              :body {:type "Server Error"
+                     :message "A server error occurred."}})})))
 
 
 (def formats
