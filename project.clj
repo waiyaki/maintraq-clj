@@ -7,16 +7,17 @@
                  [org.clojure/tools.cli "0.4.2"]
                  [aero "1.1.3"]
                  [com.datomic/datomic-free "0.9.5697"]
+                 [com.taoensso/timbre "4.10.0"]
+                 [com.walmartlabs/lacinia "0.34.0"]
                  [datomic-schema "1.3.0"]
+                 [funcool/struct "1.3.0"]
                  [io.rkn/conformity "0.5.1"]
                  [mount "0.1.16"]
                  [metosin/reitit "0.3.9"]
                  [metosin/muuntaja "0.6.4"]
                  [ring/ring-jetty-adapter "1.7.1"]
                  [ring/ring-defaults "0.3.2"]
-                 [ring-logger "1.0.1"]
-                 [com.taoensso/timbre "4.10.0"]
-                 [com.walmartlabs/lacinia "0.34.0"]]
+                 [ring-logger "1.0.1"]]
 
   :min-lein-version "2.0.0"
 

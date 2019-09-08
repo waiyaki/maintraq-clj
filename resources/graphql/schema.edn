@@ -36,8 +36,31 @@
                   :description "This user's account role."
                   :resolve     :users/role}}}}
 
+
  :queries
  {:user {:type        :User
          :description "Query a single user by their unique identifier."
          :args        {:id {:type (non-null :Long)}}
-         :resolve     :users/retrieve}}}
+         :resolve     :users/retrieve}}
+
+
+ :input-objects
+ {;;; User
+  :user_create_params
+  {:description "Parameters to create an account with."
+   :fields      {:username         {:type (non-null :String)}
+                 :email            {:type (non-null :String)}
+                 :password         {:type (non-null :String)}
+                 :confirm_password {:type        (non-null :String)
+                                    :description "Password confirmation. Should be the same value that is `password`."}
+                 :first_name       {:type :String}
+                 :middle_name      {:type :String}
+                 :last_name        {:type :String}}}}
+
+
+ :mutations
+ {:user_create {:type        :User
+                :description "Create a user."
+                :args        {:params {:type        :user_create_params
+                                       :description "Parameters to create a user account with."}}
+                :resolve     :users/create!}}}
