@@ -38,7 +38,7 @@
       (timbre/error (str/join "/n" errors))
       (System/exit 1))
     (doseq [component (:started (mount/start-with-args {:env (:env options)}))]
-      (timbre/info component "started"))
+      (timbre/info "started" component))
     (.addShutdownHook (Runtime/getRuntime) (Thread. stop-app)) ))
 
 

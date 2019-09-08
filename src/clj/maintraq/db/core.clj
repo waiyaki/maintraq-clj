@@ -4,6 +4,7 @@
    [mount.core :refer [defstate]]
    [maintraq.config :as config :refer [config]]
    [maintraq.db.schema :as schema]
+   [maintraq.seed.core :as seed]
    [taoensso.timbre :as timbre]))
 
 
@@ -12,6 +13,7 @@
   (d/create-database uri)
   (let [conn (d/connect uri)]
     (schema/conform-schema! conn)
+    (seed/seed! conn)
     conn))
 
 
