@@ -88,10 +88,10 @@
         return fetch(window.location.origin + '/api/graphql' + computeParams(), {
           method: 'post',
           headers: {
-            'Content-Type': 'application/graphql',
+            'Content-Type': 'application/json',
             'apikey': 'graphiql'
           },
-		  body: graphQLParams.query
+            body: JSON.stringify(graphQLParams)
         }).then(function (response) {
           return response.text();
         }).then(function (responseBody) {

@@ -51,4 +51,7 @@
 
 (defn handler [req]
   {:status 200
-   :body (execute compiled-schema (-> req :body slurp) nil (->context req))})
+   :body   (execute compiled-schema
+                    (-> req :body-params :query)
+                    nil
+                    (->context req))})
