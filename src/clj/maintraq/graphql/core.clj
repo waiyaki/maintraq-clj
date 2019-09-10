@@ -52,15 +52,23 @@
   (lacinia/execute schema query-string variables context options))
 
 
-(defn handler [req]
-  (let [{:keys [query
-                variables
-                operationName]}  (:body-params req)
-        {:keys [errors] :as res} (execute compiled-schema
-                                          query
-                                          variables
-                                          (->context req)
-                                          {:operation-name operationName})
-        status                   (or (some-> errors first :extensions :status) 200)]
+(defn handler
+  "Handle a GraphQL request.
+
+  When the response returned by the resolver has errors, the response status
+  is attempted to be obtained from the extensions of the first error message.
+  For errors without a status extension, a generic 500 response status is used."
+  [req]
+  (let [{:keys [query variables operationName]} (:body-params req)
+        {:keys [errors] :as res}
+        (execute compiled-schema
+                 query
+                 variables
+                 (->context req)
+                 {:operation-name operationName})
+
+        status (if-not (some? errors)
+                 200
+                 (or (some-> errors first :extensions :status) 500))]
     {:status status
      :body   res}))
