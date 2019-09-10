@@ -55,11 +55,11 @@
 
 (defn create!
   "Create a new member user account."
-  [{:keys [conn] :as ctx} {:keys [params] :as args} _]
-  (let [[errors] (st/validate params (user-schema (d/db conn)))]
+  [{:keys [conn] :as ctx} {:keys [input] :as args} _]
+  (let [[errors] (st/validate input (user-schema (d/db conn)))]
     (if (some? errors)
       (errors/bad-request "Validation error" errors)
-      (let [user                       (user/create (assoc params :role :user.role/member))
+      (let [user                       (user/create (assoc input :role :user.role/member))
             {:keys [db-after tempids]} @(d/transact conn [user])]
         (d/entity db-after (d/resolve-tempid db-after tempids (:db/id user)))))))
 

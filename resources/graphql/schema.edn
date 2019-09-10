@@ -46,8 +46,8 @@
 
  :input-objects
  {;;; User
-  :user_create_params
-  {:description "Parameters to create an account with."
+  :user_create_input
+  {:description "Input fields to create an account with."
    :fields      {:username         {:type (non-null :String)}
                  :email            {:type (non-null :String)}
                  :password         {:type (non-null :String)}
@@ -61,6 +61,6 @@
  :mutations
  {:user_create {:type        :User
                 :description "Create a user."
-                :args        {:params {:type        :user_create_params
-                                       :description "Parameters to create a user account with."}}
+                :args        {:input {:type        :user_create_input
+                                      :description "Input to create a user account with."}}
                 :resolve     :users/create!}}}
