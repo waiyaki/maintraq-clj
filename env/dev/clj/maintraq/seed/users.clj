@@ -14,6 +14,7 @@
    (let [first-name (or first-name (faker.name/first-name))
          username   (or username (-> first-name gensym str))]
      (merge {:db/id                (db.partition/tempid db.partition/users)
+             :user/uid             (d/squuid)
              :user/email           (or email (faker.internet/email username))
              :user/username        username
              :user/first-name      first-name

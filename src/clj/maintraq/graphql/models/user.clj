@@ -14,6 +14,7 @@
           :user/username        username
           :user/role            role
           :user/activated       false
+          :user/uid             (d/squuid)
           :user/activation-hash (d/squuid)
           :user/password        (hashers/derive password)}
          (ut/remove-nils {:user/first-name  first_name

@@ -43,13 +43,9 @@
 
 (defn retrieve
   "Retrieve a user account by its unique identifier."
-  [{:keys [conn] :as ctx} {:keys [id] :as args} _]
-  (if-let [user (d/q '[:find ?a .
-                       :in $ ?a
-                       :where
-                       [?a :user/email _]]
-                     (d/db conn) id)]
-    (d/entity (d/db conn) user)
+  [{:keys [conn] :as ctx} {:keys [uid] :as args} _]
+  (if-some [user (d/entity (d/db conn) [:user/uid uid])]
+    user
     (errors/not-found "User not found.")))
 
 

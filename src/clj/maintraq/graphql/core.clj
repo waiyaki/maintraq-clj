@@ -23,7 +23,10 @@
 (def custom-scalars
   {:scalars
    {:Long {:parse     (parse-scalar #(Long. %))
-           :serialize (parse-scalar #(Long. %))}}})
+           :serialize (parse-scalar #(Long. %))}
+
+    :UUID {:parse     (parse-scalar #(java.util.UUID/fromString %))
+           :serialize (parse-scalar str)}}})
 
 
 (defstate compiled-schema

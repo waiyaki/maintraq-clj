@@ -26,6 +26,7 @@
    [(schema
      user
      (fields
+      [uid :uuid :unique-identity :indexed]
       [email :string :unique-identity :indexed]
       [username :string :unique-identity :indexed]
       [first-name :string :indexed]
