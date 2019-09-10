@@ -3,7 +3,7 @@
    [clojure.string :as str]
    [datomic.api :as d]
    [maintraq.handlers.errors :as errors]
-   [maintraq.graphql.models.user :as user]
+   [maintraq.db.models.user :as user]
    [struct.core :as st]))
 
 

@@ -1,4 +1,4 @@
-(ns maintraq.graphql.models.user
+(ns maintraq.db.models.user
   (:require
    [buddy.hashers :as hashers]
    [datomic.api :as d]
