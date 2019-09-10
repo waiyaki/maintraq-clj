@@ -6,6 +6,7 @@
   :dependencies [[org.clojure/clojure "1.10.1"]
                  [org.clojure/tools.cli "0.4.2"]
                  [aero "1.1.3"]
+                 [buddy/buddy-hashers "1.4.0"]
                  [com.datomic/datomic-free "0.9.5697"]
                  [com.taoensso/timbre "4.10.0"]
                  [com.walmartlabs/lacinia "0.34.0"]

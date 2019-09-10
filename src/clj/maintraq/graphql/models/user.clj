@@ -1,5 +1,6 @@
 (ns maintraq.graphql.models.user
   (:require
+   [buddy.hashers :as hashers]
    [datomic.api :as d]
    [maintraq.db.partition :as db.partition]
    [maintraq.utils.core :as ut]))
@@ -13,7 +14,8 @@
           :user/username        username
           :user/role            role
           :user/activated       false
-          :user/activation-hash (d/squuid)}
-         (ut/remove-nils {:user/first-name first_name
-                             :user/last-name  last_name
-                             :user/middle-name middle_name})))
+          :user/activation-hash (d/squuid)
+          :user/password        (hashers/derive password)}
+         (ut/remove-nils {:user/first-name  first_name
+                          :user/last-name   last_name
+                          :user/middle-name middle_name})))
