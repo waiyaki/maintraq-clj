@@ -45,13 +45,19 @@
    :conn (-> req :deps :conn)})
 
 
-(defn execute [schema query-string variables context]
-  (lacinia/execute schema query-string variables context))
+(defn execute [schema query-string variables context options]
+  (lacinia/execute schema query-string variables context options))
 
 
 (defn handler [req]
-  {:status 200
-   :body   (execute compiled-schema
-                    (-> req :body-params :query)
-                    nil
-                    (->context req))})
+  (let [{:keys [query
+                variables
+                operationName]}  (:body-params req)
+        {:keys [errors] :as res} (execute compiled-schema
+                                          query
+                                          variables
+                                          (->context req)
+                                          {:operation-name operationName})
+        status                   (or (some-> errors first :extensions :status) 200)]
+    {:status status
+     :body   res}))
