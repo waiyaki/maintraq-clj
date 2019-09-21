@@ -30,3 +30,7 @@
   {:to (:user/email user)
    :subject "Confirm Your Email"
    :text (emails/confirm-registration config user)})
+
+
+(defn activated? [user]
+  (true? (:user/activated user)))

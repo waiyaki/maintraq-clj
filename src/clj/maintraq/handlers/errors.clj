@@ -1,6 +1,7 @@
 (ns maintraq.handlers.errors
   (:require
-   [com.walmartlabs.lacinia.resolve :refer [resolve-as]]))
+   [com.walmartlabs.lacinia.resolve :refer [resolve-as]]
+   [maintraq.utils.core :as ut]))
 
 
 (defn not-found [message]
@@ -8,7 +9,14 @@
                    :message message}))
 
 
-(defn bad-request [message errors]
-  (resolve-as nil {:status 400
-                   :message message
-                   :errors errors}))
+(defn bad-request
+  ([message]
+   (bad-request message nil))
+  ([message errors]
+   (resolve-as nil (ut/remove-nils {:status  400
+                                    :message message
+                                    :errors  errors}))))
+
+(defn conflict [message]
+  (resolve-as nil {:status  409
+                   :message message}))
