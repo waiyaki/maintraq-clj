@@ -22,3 +22,15 @@
 
 (defn server-port [config]
   (get-in config [:server :port]))
+
+
+(defn host [config app-name]
+  (get-in config [:hosts app-name]))
+
+
+(defn mailgun-api-key [config]
+  (get-in config [:secrets :services :mailgun :api-key]))
+
+
+(defn mailgun-domain [config]
+  (get-in config [:secrets :services :mailgun :domain]))

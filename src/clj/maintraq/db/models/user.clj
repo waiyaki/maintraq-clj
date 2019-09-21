@@ -2,7 +2,9 @@
   (:require
    [buddy.hashers :as hashers]
    [datomic.api :as d]
+   [maintraq.config :as config :refer [config]]
    [maintraq.db.partition :as db.partition]
+   [maintraq.services.mailgun.emails :as emails]
    [maintraq.utils.core :as ut]))
 
 
@@ -20,3 +22,11 @@
          (ut/remove-nils {:user/first-name  first_name
                           :user/last-name   last_name
                           :user/middle-name middle_name})))
+
+
+(defn confirmation-email
+  "Generate confirmation email data from a user."
+  [user]
+  {:to (:user/email user)
+   :subject "Confirm Your Email"
+   :text (emails/confirm-registration config user)})

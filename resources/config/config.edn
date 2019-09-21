@@ -3,4 +3,6 @@
                      "datomic:mem://localhost:4224/maintraq"]}
 
  :server  {:port #or [#env WEB_PORT 3009]}
+ :hosts   {:api #profile {:dev #join ["http://localhost:"
+                                      ^:ref [:server :port]]}}
  :secrets #include #join [#env HOME "/.clj-secrets.edn"]}

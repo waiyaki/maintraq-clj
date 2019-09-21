@@ -2,8 +2,11 @@
   (:require
    [clojure.string :as str]
    [datomic.api :as d]
+   [maintraq.config :as config :refer [config]]
    [maintraq.handlers.errors :as errors]
    [maintraq.db.models.user :as user]
+   [maintraq.services.mailgun.core :as mailgun]
+   [maintraq.services.mailgun.emails :as emails]
    [struct.core :as st]))
 
 
@@ -55,9 +58,13 @@
   (let [[errors] (st/validate input (user-schema (d/db conn)))]
     (if (some? errors)
       (errors/bad-request "Validation error" errors)
-      (let [user                       (user/create (assoc input :role :user.role/member))
-            {:keys [db-after tempids]} @(d/transact conn [user])]
-        (d/entity db-after (d/resolve-tempid db-after tempids (:db/id user)))))))
+      (let [user-data                  (user/create (assoc input :role :user.role/member))
+            {:keys [db-after tempids]} @(d/transact conn [user-data])
+            user                       (d/entity
+                                        db-after
+                                        (d/resolve-tempid db-after tempids (:db/id user-data)))]
+        (mailgun/send-email! config (user/confirmation-email user))
+        user))))
 
 
 (def resolvers
