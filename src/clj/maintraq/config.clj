@@ -34,3 +34,7 @@
 
 (defn mailgun-domain [config]
   (get-in config [:secrets :services :mailgun :domain]))
+
+
+(defn auth-secret [config]
+  (get-in config [:secrets :auth :maintraq]))

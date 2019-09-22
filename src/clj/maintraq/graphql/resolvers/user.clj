@@ -2,6 +2,7 @@
   (:require
    [clojure.string :as str]
    [datomic.api :as d]
+   [maintraq.auth.core :as auth]
    [maintraq.config :as config :refer [config]]
    [maintraq.handlers.errors :as errors]
    [maintraq.db.models.user :as user]
@@ -88,9 +89,26 @@
         (d/entity db-after user-id)))))
 
 
+(defn login
+  [{:keys [conn] :as ctx} {{:keys [username password] :as input} :input :as args} _]
+  (let [user (d/entity (d/db conn) [:user/username username])]
+    (cond
+      (nil? user)                     (errors/unauthorized "Invalid username/password combination.")
+      (false? (user/valid-password?
+               user
+               password))             (errors/unauthorized
+                                       "Invalid username/password combination.")
+      (false? (user/activated? user)) (errors/forbidden "This user account is inactive.")
+      :else                           {:token (auth/sign {:uid (:user/uid user)})})))
+
+
 (def resolvers
-  {:users/full-name full-name
+  {;; Queries
+   :users/full-name full-name
    :users/role      role
    :users/retrieve  retrieve
+
+   ;; Mutations
    :users/create!   create!
-   :users/activate! activate!})
+   :users/activate! activate!
+   :users/login     login})

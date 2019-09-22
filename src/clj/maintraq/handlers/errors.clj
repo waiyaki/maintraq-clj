@@ -17,6 +17,23 @@
                                     :message message
                                     :errors  errors}))))
 
+
 (defn conflict [message]
   (resolve-as nil {:status  409
                    :message message}))
+
+
+(defn unauthorized
+  ([]
+   (unauthorized "Invalid authentication credentials."))
+  ([message]
+   (resolve-as nil {:status 401
+                    :message message})))
+
+
+(defn forbidden
+  ([]
+   (unauthorized "Forbidden."))
+  ([message]
+   (resolve-as nil {:status 403
+                    :message message})))

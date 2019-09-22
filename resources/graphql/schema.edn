@@ -34,7 +34,12 @@
                   :resolve     (:get :user/activated)}
     :role        {:type        (non-null :role)
                   :description "This user's account role."
-                  :resolve     :users/role}}}}
+                  :resolve     :users/role}}}
+
+  :AuthToken
+  {:description "An authentication token object."
+   :fields      {:token {:type        (non-null :String)
+                         :description "The authentication JWT token."}}}}
 
 
  :queries
@@ -64,20 +69,34 @@
                       :description "UID of the account to activate."}
     :activation_hash {:type        (non-null :String)
                       :description "Associated activation hash for this account.
-                                    Sent to the email provided by the user when creating their account."}}}}
+                                    Sent to the email provided by the user when creating their account."}}}
+
+  :user_login_input
+  {:description "Input fields to log a user in with."
+   :fields
+   {:username {:type        (non-null :String)
+               :description "User's username."}
+    :password {:type        (non-null :String)
+               :description "User's password."}}}}
 
 
  :mutations
  {:user_create
   {:type        :User
    :description "Create a user."
-   :args        {:input {:type        :user_create_input
+   :args        {:input {:type        (non-null :user_create_input)
                          :description "Input to create a user account with."}}
    :resolve     :users/create!}
 
   :user_activate
   {:type        :User
    :description "Activate a user's account."
-   :args        {:input {:type        :user_activation_input
+   :args        {:input {:type        (non-null :user_activation_input)
                          :description "Input fields to activate a user account with."}}
-   :resolve     :users/activate!}}}
+   :resolve     :users/activate!}
+
+  :user_login
+  {:type        :AuthToken
+   :description "Log a user in."
+   :args        {:input {:type (non-null :user_login_input)}}
+   :resolve     :users/login}}}

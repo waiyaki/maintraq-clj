@@ -32,5 +32,13 @@
    :text (emails/confirm-registration config user)})
 
 
-(defn activated? [user]
+(defn activated?
+  "Return `true` if this user account is activated."
+  [user]
   (true? (:user/activated user)))
+
+
+(defn valid-password?
+  "Return `true` if the provided password matches the hashed password stored in provided user."
+  [user password]
+  (hashers/check password (:user/password user)))
