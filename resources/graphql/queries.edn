@@ -1,0 +1,5 @@
+{:queries
+ {:user {:type        :User
+         :description "Query a single user by their unique identifier."
+         :args        {:uid {:type (non-null :UUID)}}
+         :resolve     :users/retrieve}}}

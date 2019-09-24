@@ -1,0 +1,4 @@
+{:enums
+ {:role
+  {:description "User account roles"
+   :values      [:admin :member :maintenance]}}}

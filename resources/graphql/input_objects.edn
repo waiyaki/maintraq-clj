@@ -1,0 +1,29 @@
+{:input-objects
+ {;;; User
+  :user_create_input
+  {:description "Input fields to create an account with."
+   :fields      {:username         {:type (non-null :String)}
+                 :email            {:type (non-null :String)}
+                 :password         {:type (non-null :String)}
+                 :confirm_password {:type        (non-null :String)
+                                    :description "Password confirmation. Should be the same value that is `password`."}
+                 :first_name       {:type :String}
+                 :middle_name      {:type :String}
+                 :last_name        {:type :String}}}
+
+  :user_activation_input
+  {:description "Input fields to activate a user account with."
+   :fields
+   {:uid             {:type        (non-null :UUID)
+                      :description "UID of the account to activate."}
+    :activation_hash {:type        (non-null :String)
+                      :description "Associated activation hash for this account.
+                                    Sent to the email provided by the user when creating their account."}}}
+
+  :user_login_input
+  {:description "Input fields to log a user in with."
+   :fields
+   {:username {:type        (non-null :String)
+               :description "User's username."}
+    :password {:type        (non-null :String)
+               :description "User's password."}}}}}

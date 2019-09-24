@@ -1,0 +1,20 @@
+{:mutations
+ {:user_create
+  {:type        :User
+   :description "Create a user."
+   :args        {:input {:type        (non-null :user_create_input)
+                         :description "Input to create a user account with."}}
+   :resolve     :users/create!}
+
+  :user_activate
+  {:type        :User
+   :description "Activate a user's account."
+   :args        {:input {:type        (non-null :user_activation_input)
+                         :description "Input fields to activate a user account with."}}
+   :resolve     :users/activate!}
+
+  :user_login
+  {:type        :AuthToken
+   :description "Log a user in."
+   :args        {:input {:type (non-null :user_login_input)}}
+   :resolve     :users/login}}}

@@ -1,5 +1,6 @@
 (ns maintraq.graphql.core
   (:require
+   [buddy.auth :refer [authenticated?]]
    [clojure.edn :as edn]
    [clojure.java.io :as io]
    [com.walmartlabs.lacinia :as lacinia]
@@ -29,18 +30,40 @@
            :serialize (parse-scalar str)}}})
 
 
-(defstate compiled-schema
-  :start (-> "graphql/schema.edn"
-             io/resource
-             slurp
-             edn/read-string
-             (merge custom-scalars)
-             (util/attach-resolvers
-              (merge {:get (fn [& ks]
-                             (fn [_ _ v]
-                               (get-in v ks)))}
-                     user/resolvers))
-             schema/compile))
+(def unauthenticated-schema-files
+  ["unauthenticated_mutations.edn" "unauthenticated_queries.edn"])
+
+
+(def authenticated-schema-files
+  (concat unauthenticated-schema-files ["mutations.edn" "queries.edn"]))
+
+
+(def resolvers (merge {:get (fn [& ks]
+                              (fn [_ _ v]
+                                (get-in v ks)))}
+                      user/resolvers))
+
+
+(defn- make-entire-schema [schema-files]
+  (->> (concat schema-files  ["objects.edn" "input_objects.edn" "enums.edn"])
+       (map #(edn/read-string (slurp (io/resource (str "graphql/" %)))))
+       (apply merge-with merge)
+       (merge custom-scalars)))
+
+
+(defn- compile-schema [schema-files]
+  (-> schema-files
+      make-entire-schema
+      (util/attach-resolvers resolvers)
+      schema/compile))
+
+
+(defstate unauthenticated-schema
+  :start (compile-schema unauthenticated-schema-files))
+
+
+(defstate authenticated-schema
+  :start (compile-schema authenticated-schema-files))
 
 
 (defn ->context [req]
@@ -61,7 +84,9 @@
   [req]
   (let [{:keys [query variables operationName]} (:body-params req)
         {:keys [errors] :as res}
-        (execute compiled-schema
+        (execute (if (authenticated? req)
+                   authenticated-schema
+                   unauthenticated-schema)
                  query
                  variables
                  (->context req)
