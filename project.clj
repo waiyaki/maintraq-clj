@@ -6,7 +6,7 @@
   :dependencies [[org.clojure/clojure "1.10.1"]
                  [org.clojure/tools.cli "0.4.2"]
                  [aero "1.1.3"]
-                 [buddy/buddy-auth "2.2.0"]
+                 [buddy/buddy-auth "2.1.0"]
                  [buddy/buddy-hashers "1.4.0"]
                  [buddy/buddy-sign "3.1.0"]
                  [clj-http "3.10.0"]

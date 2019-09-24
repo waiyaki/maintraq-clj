@@ -16,7 +16,6 @@
 
 (defn unsign
   [token]
-  (jwt/unsign
-   token
-   (config/auth-secret config)
-   {:now (t/inst (t/now))}))
+  (jwt/unsign token
+              (config/auth-secret config)
+              {:now (t/inst (t/now))}))

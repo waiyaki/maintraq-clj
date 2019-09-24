@@ -6,6 +6,7 @@
    [reitit.ring.coercion :as coercion]
    [reitit.ring.middleware.muuntaja :as muuntaja]
    [reitit.ring.middleware.parameters :as parameters]
+   [maintraq.auth.middleware :as auth.middleware]
    [maintraq.handlers.middleware :as middleware]
    [maintraq.graphql.core :as graphql]))
 
@@ -40,7 +41,9 @@
                            ;; coercing response bodys
                            coercion/coerce-response-middleware
                            ;; coercing request parameters
-                           coercion/coerce-request-middleware]}
+                           coercion/coerce-request-middleware
+                           ;; Authentication
+                           auth.middleware/wrap-auth]}
              ["" {:get {:handler hello}}]
              ["/graphql" {:post {:handler graphql/handler}}]]])
           (ring/create-default-handler)))
