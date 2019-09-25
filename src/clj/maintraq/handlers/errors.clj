@@ -27,13 +27,13 @@
   ([]
    (unauthorized "Invalid authentication credentials."))
   ([message]
-   (resolve-as nil {:status 401
+   (resolve-as nil {:status  401
                     :message message})))
 
 
 (defn forbidden
   ([]
-   (unauthorized "Forbidden."))
+   (forbidden "Forbidden."))
   ([message]
-   (resolve-as nil {:status 403
+   (resolve-as nil {:status  403
                     :message message})))

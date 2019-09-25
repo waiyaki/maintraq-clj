@@ -33,27 +33,8 @@
    :middle_name      [st/string]})
 
 
-(defn role [_ _ user]
-  (some-> user :user/role name))
-
-
-(defn full-name [_ _ user]
-  (->> (select-keys user [:user/first-name :user/middle-name :user/last-name])
-       vals
-       (remove nil?)
-       (str/join " ")
-       not-empty))
-
-
-(defn retrieve
-  "Retrieve a user account by its unique identifier."
-  [{:keys [conn] :as ctx} {:keys [uid] :as args} _]
-  (if-some [user (d/entity (d/db conn) [:user/uid uid])]
-    user
-    (errors/not-found "User not found.")))
-
-
-(defn create!
+(defn ^{:authorized? (constantly true)}
+  create!
   "Create a new member user account."
   [{:keys [conn] :as ctx} {:keys [input] :as args} _]
   (let [[errors] (st/validate input (user-schema (d/db conn)))]
@@ -68,7 +49,8 @@
         user))))
 
 
-(defn activate!
+(defn ^{:authorized? (constantly true)}
+  activate!
   "Activate a user account."
   [{:keys [conn] :as ctx} {:keys [input] :as args} _]
   (let [{:keys [uid activation_hash]} input
@@ -89,7 +71,9 @@
         (d/entity db-after user-id)))))
 
 
-(defn login
+(defn ^{:authorized? (constantly true)}
+  login
+  "Log a user in. Return a JWT token when login is successful."
   [{:keys [conn] :as ctx} {{:keys [username password] :as input} :input :as args} _]
   (let [user (d/entity (d/db conn) [:user/username username])]
     (cond
@@ -100,6 +84,38 @@
                                        "Invalid username/password combination.")
       (false? (user/activated? user)) (errors/forbidden "This user account is inactive.")
       :else                           {:token (auth/sign {:uid (:user/uid user)})})))
+
+
+(defn ^{:authorized? (constantly true)}
+  role
+  "Extract a user's role name."
+  [_ _ user]
+  (some-> user :user/role name))
+
+
+(defn ^{:authorized? (constantly true)}
+  full-name
+  "Construct a user's full name, if available."
+  [_ _ user]
+  (->> (select-keys user [:user/first-name :user/middle-name :user/last-name])
+       vals
+       (remove nil?)
+       (str/join " ")
+       not-empty))
+
+
+(defn
+  ^{:authorized?         (fn ^{:doc "Users can retrieve own accounts"}
+                           [{:keys [db requester]} {:keys [uid]} _]
+                           (let [user (d/entity db [:user/uid uid])]
+                             (= (:user/uid requester) (:user/uid user))))
+    :authorization-error (errors/not-found "User not found.")}
+  retrieve
+  "Retrieve a user account by its unique identifier."
+  [{:keys [conn] :as ctx} {:keys [uid] :as args} _]
+  (if-some [user (d/entity (d/db conn) [:user/uid uid])]
+    user
+    (errors/not-found "User not found.")))
 
 
 (def resolvers

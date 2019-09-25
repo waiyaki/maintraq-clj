@@ -7,6 +7,7 @@
    [com.walmartlabs.lacinia.util :as util]
    [com.walmartlabs.lacinia.schema :as schema]
    [mount.core :as mount :refer [defstate]]
+   [maintraq.auth.resolvers :as auth.resolvers]
    [maintraq.graphql.resolvers.user :as user]))
 
 
@@ -30,6 +31,12 @@
            :serialize (parse-scalar str)}}})
 
 
+(def utility-resolvers
+  {:get (fn [& ks]
+          (fn [_ _ v]
+            (get-in v ks)))})
+
+
 (def unauthenticated-schema-files
   ["unauthenticated_mutations.edn" "unauthenticated_queries.edn"])
 
@@ -38,17 +45,16 @@
   (concat unauthenticated-schema-files ["mutations.edn" "queries.edn"]))
 
 
-(def resolvers (merge {:get (fn [& ks]
-                              (fn [_ _ v]
-                                (get-in v ks)))}
-                      user/resolvers))
+(def resolvers
+  (apply (partial merge utility-resolvers)
+         (apply auth.resolvers/authorize-resolvers
+                [#'user/resolvers])))
 
 
 (defn- make-entire-schema [schema-files]
   (->> (concat schema-files  ["objects.edn" "input_objects.edn" "enums.edn"])
        (map #(edn/read-string (slurp (io/resource (str "graphql/" %)))))
-       (apply merge-with merge)
-       (merge custom-scalars)))
+       (apply merge-with merge custom-scalars)))
 
 
 (defn- compile-schema [schema-files]
@@ -67,8 +73,9 @@
 
 
 (defn ->context [req]
-  {:deps (:deps req)
-   :conn (-> req :deps :conn)})
+  {:deps      (:deps req)
+   :conn      (-> req :deps :conn)
+   :requester (:identity req)})
 
 
 (defn execute [schema query-string variables context options]

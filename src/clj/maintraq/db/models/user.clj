@@ -42,3 +42,9 @@
   "Return `true` if the provided password matches the hashed password stored in provided user."
   [user password]
   (hashers/check password (:user/password user)))
+
+
+(defn admin?
+  "Return `true` if this user is an admin."
+  [user]
+  (= :user.role/admin (:user/role user)))
