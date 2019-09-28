@@ -24,7 +24,7 @@
     :id :env
     :default :prod
     :parse-fn keyword
-    :validate [#{:prod :dev} "Must be one of #{:prod :dev}"]]])
+    :validate [#{:prod :dev :test} "Must be one of #{:prod :dev}"]]])
 
 
 (defn stop-app []

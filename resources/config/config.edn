@@ -1,8 +1,16 @@
-{:datomic {:uri #or [#env DATOMIC_URI
-                     #ref [:secrets :datomic :uri]
-                     "datomic:mem://localhost:4224/maintraq"]}
+{:datomic {:uri #profile {:default #or [#env DATOMIC_URI
+                                        #ref [:secrets :datomic :uri]
+                                        "datomic:mem://localhost:4224/maintraq"]
+                          :dev     #or [#env DATOMIC_URI
+                                        #ref [:secrets :datomic :uri]
+                                        "datomic:mem://localhost:4224/maintraq"]
+                          :test    "datomic:mem://localhost:4225/maintraq"}}
 
- :server  {:port #or [#env WEB_PORT 3009]}
- :hosts   {:api #profile {:dev #join ["http://localhost:"
-                                      ^:ref [:server :port]]}}
+ :server  {:port #profile {:default #or [#env WEB_PORT 3009]
+                           :dev     3009
+                           :test    3010}}
+ :hosts   {:api #profile {:dev  #join ["http://localhost:"
+                                       ^:ref [:server :port]]
+                          :test #join ["http://localhost:"
+                                       ^:ref [:server :port]]}}
  :secrets #include #join [#env HOME "/.clj-secrets.edn"]}

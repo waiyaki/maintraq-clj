@@ -17,8 +17,9 @@
                  [funcool/struct "1.3.0"]
                  [io.rkn/conformity "0.5.1"]
                  [mount "0.1.16"]
-                 [metosin/reitit "0.3.9"]
+                 [metosin/jsonista "0.2.4"]
                  [metosin/muuntaja "0.6.4"]
+                 [metosin/reitit "0.3.9"]
                  [ring/ring-jetty-adapter "1.7.1"]
                  [ring/ring-defaults "0.3.2"]
                  [ring-logger "1.0.1"]
@@ -40,4 +41,7 @@
                        :dependencies [[org.clojure/tools.namespace "0.3.1"]
                                       [expound "0.7.2"]
                                       [ring/ring-devel "1.7.1"]
-                                      [faker "0.2.2"]]}})
+                                      [faker "0.2.2"]
+
+                                      ;; tests
+                                      [vincit/venia "0.2.5"]]}})
