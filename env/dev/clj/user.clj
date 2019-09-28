@@ -3,13 +3,17 @@
    [clojure.spec.alpha :as s]
    [clojure.tools.namespace.repl :refer [refresh]]
    [expound.alpha :as expound]
-   [mount.core :as mount]
    [maintraq.core :refer [start-app]]
+   [maintraq.db.core :refer [conn]]
+   [maintraq.seed.core :as seed]
+   [mount.core :as mount]
    [taoensso.timbre :as timbre]))
 
 
 (defn start []
-  (start-app ["-e" "dev"]))
+  (start-app ["-e" "dev"])
+  (seed/seed! conn)
+  :ready)
 
 
 (def stop mount/stop)
