@@ -9,9 +9,7 @@
 
 
 (defn start []
-  (let [started (:started (mount/start-with-args {:env :dev}))]
-    (doseq [component started]
-      (timbre/info "started" component))))
+  (start-app ["-e" "dev"]))
 
 
 (def stop mount/stop)

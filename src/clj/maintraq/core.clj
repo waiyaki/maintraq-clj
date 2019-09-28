@@ -4,6 +4,7 @@
    [clojure.string :as str]
    [clojure.tools.cli :as cli]
    [mount.core :as mount :refer [defstate]]
+   [maintraq.deps :as deps]
    [maintraq.server :as server]
    [maintraq.handler :as handler]
    [maintraq.config :as config :refer [config]]
@@ -12,7 +13,7 @@
 
 
 (defstate ^{:on-reload :noop} http-server
-  :start (server/start {:handler (handler/app)
+  :start (server/start {:handler (handler/app (deps/deps))
                         :port    (config/server-port config)})
   :stop (when http-server
           (server/stop http-server)))
@@ -39,7 +40,7 @@
       (System/exit 1))
     (doseq [component (:started (mount/start-with-args {:env (:env options)}))]
       (timbre/info "started" component))
-    (.addShutdownHook (Runtime/getRuntime) (Thread. stop-app)) ))
+    (.addShutdownHook (Runtime/getRuntime) (Thread. stop-app))))
 
 
 (defn -main [& args]

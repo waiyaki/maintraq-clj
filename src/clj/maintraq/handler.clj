@@ -4,5 +4,7 @@
    [maintraq.handlers.routes :as routes]))
 
 
-(defn app []
-  (middleware/wrap-base #'routes/app-routes))
+(defn app [deps]
+  (-> #'routes/app-routes
+      middleware/wrap-base
+      (middleware/wrap-deps deps)))

@@ -5,7 +5,6 @@
    [ring.logger :as logger]
    [reitit.ring.middleware.exception :as exception]
    [maintraq.env :as env]
-   [maintraq.db.core :as db :refer [conn]]
    [taoensso.timbre :as timbre]))
 
 
@@ -24,13 +23,9 @@
   (m/create m/default-options))
 
 
-(defn deps []
-  {:conn conn})
-
-
-(defn wrap-deps [handler]
+(defn wrap-deps [handler deps]
   (fn [req]
-    (handler (assoc req :deps (deps)))))
+    (handler (assoc req :deps deps))))
 
 
 (defn wrap-base [handler]
@@ -38,5 +33,4 @@
       (logger/wrap-with-logger {:log-fn (fn [{:keys [level throwable message]}]
                                           (timbre/log level throwable message))})
       env/wrap-env
-      (wrap-defaults api-defaults)
-      wrap-deps))
+      (wrap-defaults api-defaults)))
