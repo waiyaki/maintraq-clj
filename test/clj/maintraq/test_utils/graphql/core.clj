@@ -10,17 +10,17 @@
   ([q] (mutation! q {}))
   ([q {:keys [headers]
        :or   {headers {}}}]
-   (:body (try
-            (client/post (format "%s/api/graphql" (config/host config :api))
-                         {:accept       :application/json
-                          :content-type :application/json
-                          :as           :json
-                          :form-params  {:query q}
-                          :headers      headers})
-            (catch Exception e
-              {:body (json/read-value
-                      (:body (ex-data e))
-                      (json/object-mapper {:decode-key-fn true}))})))))
+   (try
+     (client/post (format "%s/api/graphql" (config/host config :api))
+                  {:accept       :application/json
+                   :content-type :application/json
+                   :as           :json
+                   :form-params  {:query q}
+                   :headers      headers})
+     (catch Exception e
+       (update (ex-data e) :body #(json/read-value
+                                   %
+                                  (json/object-mapper {:decode-key-fn true})))))))
 
 
 (defn mutation [{:keys [queries name]

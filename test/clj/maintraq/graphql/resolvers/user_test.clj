@@ -21,7 +21,7 @@
                   {:queries [[:user_create {:input data}
                               [:email :username :activated :role]]]})]
         (testing "Creates a new account"
-          (is (= (get-in res [:data :user_create])
+          (is (= (get-in res [:body :data :user_create])
                  {:activated false
                   :role      "member"
                   :username  "test"
@@ -44,23 +44,23 @@
                         :confirm_password "test_password"}]
       (testing "validates password lengths"
         (let [res   (mutation* (assoc data :password "short"))
-              error (-> res :errors first :extensions :errors :password)]
+              error (-> res :body :errors first :extensions :errors :password)]
           (is (= error "less than the minimum 8"))))
 
       (testing "validates matching passwords"
         (let [res   (mutation* (assoc data :confirm_password "not-a-match"))
-              error (-> res :errors first :extensions :errors :confirm_password)]
+              error (-> res :body :errors first :extensions :errors :confirm_password)]
           (is (= error "does not match"))))
 
       (testing "validates emails"
         (let [res   (mutation* (assoc data :email "invalid"))
-              error (-> res :errors first :extensions :errors :email)]
+              error (-> res :body :errors first :extensions :errors :email)]
           (is (= error "must be a valid email"))))
 
       (with-redefs [maintraq.services.mailgun.core/send-email! (constantly nil)]
         (testing "validates uniqueness of emails and usernames"
           (let [_     (mutation* data)
                 res   (mutation* data)
-                errors (-> res :errors first :extensions :errors)]
+                errors (-> res :body :errors first :extensions :errors)]
             (is (= (:username errors) "is unavailable"))
             (is (= (:email errors) "is unavailable"))))))))
