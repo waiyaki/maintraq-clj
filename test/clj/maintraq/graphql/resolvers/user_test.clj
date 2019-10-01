@@ -1,6 +1,9 @@
 (ns maintraq.graphql.resolvers.user-test
   (:require
    [clojure.test :refer :all]
+   [datomic.api :as d]
+   [maintraq.deps :as deps]
+   [maintraq.seed.users :as seed.users]
    [maintraq.test-utils.core :as tut.core]
    [maintraq.test-utils.graphql.core :as tut.graphql]))
 
@@ -68,3 +71,33 @@
             (is (= (:username errors) "is unavailable"))
             (is (= (:email errors) "is unavailable"))
             (is (= 400 (:status res)))))))))
+
+
+(deftest user-activation-test
+  (let [{:keys [conn]} (deps/deps)
+        activate*      (fn [input]
+                         (tut.graphql/mutation
+                          {:queries [[:user_activate {:input input}
+                                      [:activated]]]}))
+        tx-user        (seed.users/user {:activated false})
+        user           (seed.users/user! conn tx-user)
+        input          {:uid             (str (:user/uid user))
+                        :activation_hash (str (:user/activation-hash user))}
+        res            (activate* input)]
+    (is (true? (-> res :body :data :user_activate :activated)))
+
+    (testing "conflicts when the user is already active"
+      (let [res   (activate* input)
+            error (-> res :body :errors first :message)]
+        (is (= 409 (:status res)))
+        (is (= error "Account is already active."))))
+
+    (testing "errors out for invalid user/activation-hash combination"
+      (let [invalid-hash (activate* (assoc input :activation_hash (str (java.util.UUID/randomUUID))))
+            invalid-uid  (activate* (assoc input :uid (str (java.util.UUID/randomUUID))))]
+        (is (= 400 (:status invalid-hash)))
+        (is (= 400 (:status invalid-uid)))
+        (is (= (-> invalid-hash :body :errors first :message)
+               "Invalid user/hash combination."))
+        (is (= (-> invalid-uid :body :errors first :message)
+               "Invalid user/hash combination."))))))
