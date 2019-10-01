@@ -34,11 +34,13 @@
   :test-paths ["test/clj"]
   :resource-paths ["resources"]
 
-  :profiles {:uberjar {:aot :all
+  :profiles {:uberjar {:aot          :all
                        :source-paths ["env/prod/clj"]}
              :dev     {:source-paths ["env/dev/clj"]
                        :repl-options {:init-ns user}
+                       :plugins      [[metosin/bat-test "0.4.3"]]
                        :dependencies [[org.clojure/tools.namespace "0.3.1"]
+                                      [org.clojure/tools.reader "1.3.2"]
                                       [expound "0.7.2"]
                                       [ring/ring-devel "1.7.1"]
                                       [faker "0.2.2"]

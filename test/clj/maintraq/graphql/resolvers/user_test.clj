@@ -45,17 +45,20 @@
       (testing "validates password lengths"
         (let [res   (mutation* (assoc data :password "short"))
               error (-> res :body :errors first :extensions :errors :password)]
-          (is (= error "less than the minimum 8"))))
+          (is (= error "less than the minimum 8"))
+          (is (= 400 (:status res)))))
 
       (testing "validates matching passwords"
         (let [res   (mutation* (assoc data :confirm_password "not-a-match"))
               error (-> res :body :errors first :extensions :errors :confirm_password)]
-          (is (= error "does not match"))))
+          (is (= error "does not match"))
+          (is (= 400 (:status res)))))
 
       (testing "validates emails"
         (let [res   (mutation* (assoc data :email "invalid"))
               error (-> res :body :errors first :extensions :errors :email)]
-          (is (= error "must be a valid email"))))
+          (is (= error "must be a valid email"))
+          (is (= 400 (:status res)))))
 
       (with-redefs [maintraq.services.mailgun.core/send-email! (constantly nil)]
         (testing "validates uniqueness of emails and usernames"
@@ -63,4 +66,5 @@
                 res   (mutation* data)
                 errors (-> res :body :errors first :extensions :errors)]
             (is (= (:username errors) "is unavailable"))
-            (is (= (:email errors) "is unavailable"))))))))
+            (is (= (:email errors) "is unavailable"))
+            (is (= 400 (:status res)))))))))
