@@ -101,3 +101,39 @@
                "Invalid user/hash combination."))
         (is (= (-> invalid-uid :body :errors first :message)
                "Invalid user/hash combination."))))))
+
+
+(deftest user-login-test
+  (let [{:keys [conn]} (deps/deps)
+        login*         (fn [creds]
+                         (tut.graphql/mutation
+                          {:queries [[:user_login {:input creds}
+                                      [:token]]]}))
+        creds          {:password "password" :username "test"}
+        user           (seed.users/user! conn (seed.users/user creds))]
+    (testing "with valid credentials, successfully logs a user in."
+      (let [res (login* creds)]
+        (is (= 200 (:status res)))
+        (is (string? (-> res :body :data :user_login :token)))))
+
+    (testing "handles invalid usernames."
+      (let [res (login* (assoc creds :username "invalid"))]
+        (is (= 401 (:status res)))
+        (is (= "Invalid username/password combination."
+               (-> res :body :errors first :message)))))
+
+    (testing "handles invalid passwords."
+      (let [res (login* (assoc creds :password "invalid"))]
+        (is (= 401 (:status res)))
+        (is (= "Invalid username/password combination."
+               (-> res :body :errors first :message)))))
+
+    (testing "does not log inactive users in."
+      (let [inactive-creds {:username  "inactive-test"
+                            :password  "password"
+                            :activated false}
+            inactive-user  (seed.users/user! conn (seed.users/user inactive-creds))
+            res            (login* (dissoc inactive-creds :activated))]
+        (is (= 403 (:status res)))
+        (is (= "This user account is inactive."
+               (-> res :body :errors first :message)))))))
