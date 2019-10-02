@@ -20,12 +20,24 @@
      (catch Exception e
        (update (ex-data e) :body #(json/read-value
                                    %
-                                  (json/object-mapper {:decode-key-fn true})))))))
+                                   (json/object-mapper {:decode-key-fn true})))))))
 
 
 (defn mutation [{:keys [queries name]
-                 :or   {name (clojure.core/name (ffirst queries))}}]
+                 :or   {name (clojure.core/name (ffirst queries))}}
+                & [{:as opts}]]
   (mutation!
    (v/graphql-query {:venia/operation {:operation/type :mutation
                                        :operation/name name}
-                     :venia/queries   queries})))
+                     :venia/queries   queries})
+   opts))
+
+
+(defn query [{:keys [queries name]
+              :or   {name (clojure.core/name (ffirst queries))}}
+             & [{:as opts}]]
+  (mutation!
+   (v/graphql-query {:venia/operation {:operation/type :query
+                                       :operation/name name}
+                     :venia/queries   queries})
+   opts))

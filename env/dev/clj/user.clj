@@ -2,6 +2,7 @@
   (:require
    [clojure.spec.alpha :as s]
    [clojure.tools.namespace.repl :refer [refresh]]
+   [datomic.api :as d]
    [expound.alpha :as expound]
    [maintraq.core :refer [start-app]]
    [maintraq.db.core :refer [conn]]
@@ -27,3 +28,16 @@
 (defn reset []
   (stop)
   (refresh :after 'user/go!))
+
+
+(comment
+  (def test-user (d/entity (d/db conn) [:user/username "waiyaki"]))
+
+  (defn activate-test-user
+    ([] (activate-test-user test-user))
+    ([t-user]
+     @(d/transact conn [{:db/id (:db/id t-user)
+                         :user/activated true}])
+     (d/entity (d/db conn) (:db/id t-user))))
+
+  (activate-test-user))

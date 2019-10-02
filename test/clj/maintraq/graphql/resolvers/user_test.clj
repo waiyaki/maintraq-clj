@@ -137,3 +137,51 @@
         (is (= 403 (:status res)))
         (is (= "This user account is inactive."
                (-> res :body :errors first :message)))))))
+
+
+(deftest user-query-test
+  (let [{:keys [conn]} (deps/deps)
+        creds          {:username "test" :password "password"}
+        user           (seed.users/user! conn (seed.users/user creds))
+        token*         (fn [input]
+                         (get-in
+                          (tut.graphql/mutation
+                           {:queries [[:user_login {:input input}
+                                       [:token]]]})
+                          [:body :data :user_login :token]))
+        token          (token* creds)
+        query*         (fn [input & [t]]
+                         (tut.graphql/query
+                          {:queries [[:user {:input input}
+                                      [:uid :username :full_name]]]}
+                          {:headers {"Authorization" (str "Bearer " (or t token))}}))]
+    (testing "retrieves user details"
+      (let [res (query* {:username (:user/username user)})]
+        (is (= "test" (-> res :body :data :user :username)))
+        (is (= (str (:user/uid user))
+               (-> res :body :data :user :uid)))
+        (is (= (str (:user/first-name user) " " (:user/last-name user))
+               (-> res :body :data :user :full_name)))))
+
+    (testing "does not allow users to access details of other users"
+      (let [other-creds {:username "other" :password "other-password"}
+            other-user  (seed.users/user! conn (seed.users/user other-creds))
+            other-token (token* other-creds)
+            res         (query* {:username (:user/username user)} other-token)]
+        (is (= 404 (:status res)))
+        (is (= "User not found."
+               (-> res :body :errors first :message)))))
+
+    (testing "allows admins access to other user accounts"
+      (let [admin       (seed.users/user! conn (seed.users/admin {:password "password"}))
+            admin-token (token* {:username "admin" :password "password"})
+            res         (query* {:username (:user/username user)} admin-token)]
+        (is (= "test" (-> res :body :data :user :username)))
+        (is (= (str (:user/uid user))
+               (-> res :body :data :user :uid)))
+
+        (testing "handles missing users"
+          (let [res (query* {:username "missing"} admin-token)]
+            (is (= 404 (:status res)))
+            (is (= "User not found."
+                   (-> res :body :errors first :message)))))))))
