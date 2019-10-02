@@ -106,14 +106,14 @@
 
 (defn
   ^{:authorized?         (fn ^{:doc "Users can retrieve own accounts"}
-                           [{:keys [db requester]} {:keys [uid]} _]
-                           (let [user (d/entity db [:user/uid uid])]
+                           [{:keys [db requester]} {{:keys [username]} :input} _]
+                           (let [user (d/entity db [:user/username username])]
                              (= (:user/uid requester) (:user/uid user))))
     :authorization-error (errors/not-found "User not found.")}
   retrieve
   "Retrieve a user account by its unique identifier."
-  [{:keys [conn] :as ctx} {:keys [uid] :as args} _]
-  (if-some [user (d/entity (d/db conn) [:user/uid uid])]
+  [{:keys [conn] :as ctx} {{:keys [username] :as input} :input :as args} _]
+  (if-some [user (d/entity (d/db conn) [:user/username username])]
     user
     (errors/not-found "User not found.")))
 
