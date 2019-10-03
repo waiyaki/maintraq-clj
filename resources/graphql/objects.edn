@@ -33,4 +33,14 @@
   :AuthToken
   {:description "An authentication token object."
    :fields      {:token {:type        (non-null :String)
-                         :description "The authentication JWT token."}}}}}
+                         :description "The authentication JWT token."}}}
+
+  :Facility
+  {:description "Object representation of a physical space, e.g. a building."
+   :fields
+   {:uid {:type (non-null :UUID)
+          :description "Unique ID for this Facility as a UUID string."
+          :resolve (:get :facility/uid)}
+    :name {:type (non-null :String)
+           :description "Name of the Facility. Expected to be unique."
+           :resolve (:get :facility/name)}}}}}

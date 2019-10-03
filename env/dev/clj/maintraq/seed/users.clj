@@ -30,6 +30,7 @@
 
 
 (defn user!
+  "Seed a user into Datomic."
   ([conn]
    (user! conn (user)))
   ([conn user]

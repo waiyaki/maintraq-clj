@@ -9,6 +9,10 @@
   (user/admin? requester))
 
 
+(defn authenticated? [{:keys [requester]} _ _]
+  (some? requester))
+
+
 (defn authorize
   "Wrap a `resolver` fn with a resolver which checks if the user in the
   incoming request is authorized to access the requested resources.

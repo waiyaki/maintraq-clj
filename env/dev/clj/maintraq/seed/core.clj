@@ -1,5 +1,6 @@
 (ns maintraq.seed.core
   (:require
+   [maintraq.seed.facilities :as seed.facilities]
    [maintraq.seed.users :as seed.users]
    [io.rkn.conformity :as conformity]
    [taoensso.timbre :as timbre]))
@@ -10,7 +11,9 @@
   []
   {::add-users
    {:txes [(conj (repeatedly 10 seed.users/user)
-                 (seed.users/admin))]}})
+                 (seed.users/admin))]}
+   ::add-facilities
+   {:txes [(repeatedly 10 seed.facilities/facility)]}})
 
 
 (defn seed! [conn]

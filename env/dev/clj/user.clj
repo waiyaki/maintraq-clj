@@ -40,4 +40,6 @@
                          :user/activated true}])
      (d/entity (d/db conn) (:db/id t-user))))
 
-  (activate-test-user))
+  (activate-test-user)
+
+)

@@ -8,6 +8,7 @@
    [com.walmartlabs.lacinia.schema :as schema]
    [mount.core :as mount :refer [defstate]]
    [maintraq.auth.resolvers :as auth.resolvers]
+   [maintraq.graphql.resolvers.facility :as facility]
    [maintraq.graphql.resolvers.user :as user]))
 
 
@@ -47,8 +48,9 @@
 
 (def resolvers
   (apply (partial merge utility-resolvers)
-         (apply auth.resolvers/authorize-resolvers
-                [#'user/resolvers])))
+         (map auth.resolvers/authorize-resolvers
+                [#'user/resolvers
+                 #'facility/resolvers])))
 
 
 (defn- make-entire-schema [schema-files]

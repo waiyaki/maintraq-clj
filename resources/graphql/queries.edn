@@ -1,5 +1,17 @@
 {:queries
+ ;; Users
  {:user {:type        :User
          :description "Query a single user by their unique identifier."
          :args        {:input {:type (non-null :user_query_input)}}
-         :resolve     :users/retrieve}}}
+         :resolve     :users/retrieve}
+
+
+  ;; Facilities
+  :facilities {:type        (list :Facility)
+               :description "List all known Facilities."
+               :resolve     :facilities/enumerate}
+
+  :facility {:type        :Facility
+             :description "Query a single known facility by its name."
+             :args        {:input {:type (non-null :facility_query_input)}}
+             :resolve     :facilities/retrieve}}}

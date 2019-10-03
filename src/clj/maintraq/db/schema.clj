@@ -1,9 +1,10 @@
 (ns maintraq.db.schema
   (:require
    [clojure.string :as str]
-   [maintraq.db.schema.user]
+   [io.rkn.conformity :as conformity]
    [maintraq.db.partition]
-   [io.rkn.conformity :as conformity]))
+   [maintraq.db.schema.user]
+   [taoensso.timbre :as timbre]))
 
 
 (defn schema?
@@ -54,10 +55,12 @@
 
 
 (defn install-partitions! [conn]
+  (timbre/info "Installing partitions...")
   (conformity/ensure-conforms conn (partition-norms)))
 
 
 (defn install-schema! [conn]
+  (timbre/info "Installing schema...")
   (conformity/ensure-conforms conn (norms-map (find-schema (all-ns)))))
 
 

@@ -31,5 +31,12 @@
   :user_query_input
   {:description "Input fields to query a user with."
    :fields
-   {:username {:type (non-null String)
-               :description "User's unique username."}}}}}
+   {:username {:type        (non-null :String)
+               :description "User's unique username."}}}
+
+
+  ;; Facilities
+  :facility_query_input
+  {:description "Input fields to retrieve a facility by."
+   :fields      {:name {:type        (non-null :String)
+                        :description "Facility's unique name."}}}}}
