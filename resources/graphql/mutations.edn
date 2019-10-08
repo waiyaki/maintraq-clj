@@ -1,2 +1,7 @@
 {:mutations
- {}}
+ {;; Facilities
+  :facility_create
+  {:type        :Facility
+   :description "Create a facility."
+   :args        {:input {:type (non-null :facility_create_input)}}
+   :resolve     :facilities/create!}}}

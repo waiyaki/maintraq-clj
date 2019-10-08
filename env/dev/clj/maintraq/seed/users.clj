@@ -43,9 +43,9 @@
   ([]
    (admin {}))
   ([opts]
-   (user (merge opts
-                {:username   "admin"
+   (user (merge {:username   "admin"
                  :first-name "admin"
                  :last-name  "MT"
                  :email      "admin@maintraq.com"
-                 :role       :user.role/admin}))))
+                 :role       :user.role/admin}
+                opts))))

@@ -12,3 +12,7 @@
    :first_name       [st/string]
    :last_name        [st/string]
    :middle_name      [st/string]})
+
+
+(defn facility [db]
+  {:name [st/required st/string (unique db :facility/name) [st/min-count 1]]})

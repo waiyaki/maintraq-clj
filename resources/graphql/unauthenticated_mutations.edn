@@ -1,5 +1,6 @@
 {:mutations
- {:user_create
+ {;; Users
+  :user_create
   {:type        :User
    :description "Create a user."
    :args        {:input {:type        (non-null :user_create_input)

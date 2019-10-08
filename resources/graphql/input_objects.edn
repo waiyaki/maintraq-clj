@@ -39,4 +39,9 @@
   :facility_query_input
   {:description "Input fields to retrieve a facility by."
    :fields      {:name {:type        (non-null :String)
+                        :description "Facility's unique name."}}}
+
+  :facility_create_input
+  {:description "Input fields to create a facility with."
+   :fields      {:name {:type        (non-null :String)
                         :description "Facility's unique name."}}}}}
