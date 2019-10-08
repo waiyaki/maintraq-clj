@@ -4,6 +4,7 @@
    [io.rkn.conformity :as conformity]
    [maintraq.db.partition]
    [maintraq.db.schema.user]
+   [maintraq.db.schema.facility]
    [taoensso.timbre :as timbre]))
 
 

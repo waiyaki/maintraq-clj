@@ -7,7 +7,7 @@
    [taoensso.timbre :as timbre]))
 
 
-(defn start-app [args]
+(defn- start-app [args]
   (let [{:keys [options errors]} (cli/parse-opts args maintraq/cli-options)]
     (when errors
       (timbre/error (str/join "/n" errors))

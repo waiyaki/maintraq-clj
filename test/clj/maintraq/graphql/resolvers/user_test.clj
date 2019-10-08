@@ -4,14 +4,14 @@
    [datomic.api :as d]
    [maintraq.deps :as deps]
    [maintraq.seed.users :as seed.users]
-   [maintraq.test-utils.core :as tut.core]
-   [maintraq.test-utils.graphql.core :as tut.graphql]))
+   [maintraq.test-utils.core :as tutils]
+   [maintraq.test-utils.graphql.core :as gql]))
 
 
-(use-fixtures :each (tut.core/server-fixture))
+(use-fixtures :each (tutils/server-fixture))
 
 
-(deftest user-creation
+(deftest user-creation-test
   (let [email-params (atom nil)]
     (with-redefs [maintraq.services.mailgun.core/send-email!
                   (fn [_ params]
@@ -20,7 +20,7 @@
                   :email            "test@user.com"
                   :password         "test_password"
                   :confirm_password "test_password"}
-            res  (tut.graphql/mutation
+            res  (gql/mutation
                   {:queries [[:user_create {:input data}
                               [:email :username :activated :role]]]})]
         (testing "Creates a new account"
@@ -35,10 +35,10 @@
           (is (= "Confirm Your Email" (get-in @email-params [:params :subject]))))))))
 
 
-(deftest user-creation-params-validation
+(deftest user-creation-params-validation-test
   (testing "validates user creation parameters"
     (let [mutation*    (fn [data]
-                         (tut.graphql/mutation
+                         (gql/mutation
                           {:queries [[:user_create {:input data}
                                       [:email :username :activated :role]]]}))
           data         {:username         "test"
@@ -76,7 +76,7 @@
 (deftest user-activation-test
   (let [{:keys [conn]} (deps/deps)
         activate*      (fn [input]
-                         (tut.graphql/mutation
+                         (gql/mutation
                           {:queries [[:user_activate {:input input}
                                       [:activated]]]}))
         tx-user        (seed.users/user {:activated false})
@@ -106,7 +106,7 @@
 (deftest user-login-test
   (let [{:keys [conn]} (deps/deps)
         login*         (fn [creds]
-                         (tut.graphql/mutation
+                         (gql/mutation
                           {:queries [[:user_login {:input creds}
                                       [:token]]]}))
         creds          {:password "password" :username "test"}
@@ -143,15 +143,9 @@
   (let [{:keys [conn]} (deps/deps)
         creds          {:username "test" :password "password"}
         user           (seed.users/user! conn (seed.users/user creds))
-        token*         (fn [input]
-                         (get-in
-                          (tut.graphql/mutation
-                           {:queries [[:user_login {:input input}
-                                       [:token]]]})
-                          [:body :data :user_login :token]))
-        token          (token* creds)
+        token          (gql/login! creds)
         query*         (fn [input & [t]]
-                         (tut.graphql/query
+                         (gql/query
                           {:queries [[:user {:input input}
                                       [:uid :username :full_name]]]}
                           {:headers {"Authorization" (str "Bearer " (or t token))}}))]
@@ -166,7 +160,7 @@
     (testing "does not allow users to access details of other users"
       (let [other-creds {:username "other" :password "other-password"}
             other-user  (seed.users/user! conn (seed.users/user other-creds))
-            other-token (token* other-creds)
+            other-token (gql/login! other-creds)
             res         (query* {:username (:user/username user)} other-token)]
         (is (= 404 (:status res)))
         (is (= "User not found."
@@ -174,7 +168,7 @@
 
     (testing "allows admins access to other user accounts"
       (let [admin       (seed.users/user! conn (seed.users/admin {:password "password"}))
-            admin-token (token* {:username "admin" :password "password"})
+            admin-token (gql/login! {:username "admin" :password "password"})
             res         (query* {:username (:user/username user)} admin-token)]
         (is (= "test" (-> res :body :data :user :username)))
         (is (= (str (:user/uid user))

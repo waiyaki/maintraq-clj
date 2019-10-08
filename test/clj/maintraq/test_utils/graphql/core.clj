@@ -41,3 +41,10 @@
                                        :operation/name name}
                      :venia/queries   queries})
    opts))
+
+
+(defn login! [input]
+  (get-in (mutation
+           {:queries [[:user_login {:input input}
+                       [:token]]]})
+          [:body :data :user_login :token]))
