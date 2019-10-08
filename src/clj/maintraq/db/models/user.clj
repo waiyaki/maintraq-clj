@@ -41,7 +41,7 @@
 (defn valid-password?
   "Return `true` if the provided password matches the hashed password stored in provided user."
   [user password]
-  (hashers/check password (:user/password user)))
+  (true? (hashers/check password (:user/password user))))
 
 
 (defn admin?
