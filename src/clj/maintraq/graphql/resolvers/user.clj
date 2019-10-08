@@ -7,37 +7,15 @@
    [maintraq.handlers.errors :as errors]
    [maintraq.db.models.user :as user]
    [maintraq.services.mailgun.core :as mailgun]
-   [maintraq.services.mailgun.emails :as emails]
+   [maintraq.validation.schema :as validation.schema]
    [struct.core :as st]))
-
-
-(defn- unique [db attr]
-  {:message "is unavailable"
-   :optional true
-   :state true
-   :validate (fn [state v]
-               (nil? (d/q '[:find ?e .
-                            :in $ ?attr ?v
-                            :where
-                            [?e ?attr ?v]]
-                          db attr v)))})
-
-
-(defn user-schema [db]
-  {:username         [st/required st/string (unique db :user/username)]
-   :email            [st/required st/email (unique db :user/email)]
-   :password         [st/required st/string [st/min-count 8]]
-   :confirm_password [st/required st/string [st/min-count 8] [st/identical-to :password]]
-   :first_name       [st/string]
-   :last_name        [st/string]
-   :middle_name      [st/string]})
 
 
 (defn ^{:authorized? (constantly true)}
   create!
   "Create a new member user account."
   [{:keys [conn] :as ctx} {:keys [input] :as args} _]
-  (let [[errors] (st/validate input (user-schema (d/db conn)))]
+  (let [[errors] (st/validate input (validation.schema/user (d/db conn)))]
     (if (some? errors)
       (errors/bad-request "Validation error" errors)
       (let [user-data                  (user/create (assoc input :role :user.role/member))
