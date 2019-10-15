@@ -1,28 +1,6 @@
 # maintraq
 
-FIXME: description
-
-## Installation
-
-Download from http://example.com/FIXME.
-
-## Usage
-
-FIXME: explanation
-
-    $ java -jar maintraq-0.1.0-standalone.jar [args]
-
-## Options
-
-FIXME: listing of options this app accepts.
-
-## Examples
-
-...
-
-### Bugs
-
-...
+A (not entirely faithful) Clojure re-implementation of [Maintraq](https://github.com/waiyaki/maintraq), a bootcamp project maintenance tracker originally written in Python.
 
 ## License
 
