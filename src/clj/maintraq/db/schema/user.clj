@@ -1,7 +1,7 @@
 (ns maintraq.db.schema.user
   (:require
    [datomic-schema.schema :as datomic.schema :refer [fields schema]]
-   [maintraq.db.partition :as partition]))
+   [maintraq.db.partition :as db.partition]))
 
 
 (def user-roles #{:user.role/admin
@@ -13,7 +13,7 @@
        :doc    "User roles"}
   roles
   (mapv (fn [role]
-          {:db/id    (partition/tempid :db.part/db)
+          {:db/id    (db.partition/tempid :db.part/db)
            :db/ident role})
         user-roles))
 

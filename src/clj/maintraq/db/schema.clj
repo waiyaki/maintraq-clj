@@ -5,6 +5,7 @@
    [maintraq.db.partition]
    [maintraq.db.schema.user]
    [maintraq.db.schema.facility]
+   [maintraq.db.schema.task]
    [taoensso.timbre :as timbre]))
 
 

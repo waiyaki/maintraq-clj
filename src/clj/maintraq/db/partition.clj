@@ -16,7 +16,7 @@
 
 (def users (db-part "users"))
 (def facilities (db-part "facilities"))
-
+(def tasks (db-part "tasks"))
 
 (def ^{:doc "Schema for partition in which to group users."
        :schema ::users}
@@ -28,3 +28,8 @@
        :schema ::facilities}
   facilities-partition
   (datomic.schema/generate-parts [facilities]))
+
+(def ^{:doc "Schema for partition in which to group tasks."
+       :schema ::tasks}
+  tasks-partition
+  (datomic.schema/generate-parts [tasks]))
