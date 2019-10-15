@@ -1,5 +1,6 @@
 (ns maintraq.graphql.resolvers.facility-test
   (:require
+   [datomic.api :as d]
    [clojure.test :refer :all]
    [maintraq.deps :as deps]
    [maintraq.seed.users :as seed.users]
@@ -23,6 +24,17 @@
                           {:headers {"Authorization" (str "Bearer " token)}})]
       (is (= 200 (:status res)))
       (is (= (:name input) (get-in res [:body :data :facility_create :name])))
+
+      (testing "creates an audit trail when a facility is created"
+        (let [facility-uid (java.util.UUID/fromString
+                            (get-in res [:body :data :facility_create :uid]))
+              audit-user   (d/q '[:find ?audit-user .
+                                  :in $ ?uid
+                                  :where
+                                  [?f :facility/uid ?uid ?tx]
+                                  [?tx :audit/user ?audit-user]]
+                                (d/db conn) facility-uid)]
+          (is (= audit-user (:db/id admin)))))
 
       (testing "validates unique facility names"
         (let [res (gql/mutation

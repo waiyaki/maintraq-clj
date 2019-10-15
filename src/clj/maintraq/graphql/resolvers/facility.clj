@@ -2,6 +2,7 @@
   (:require
    [datomic.api :as d]
    [maintraq.auth.resolvers :as auth.resolvers]
+   [maintraq.db.models.audit :as audit]
    [maintraq.db.models.facility :as facility]
    [maintraq.handlers.errors :as errors]
    [maintraq.validation.schema :as validation.schema]
@@ -32,12 +33,13 @@
 (defn ^{:authorized? auth.resolvers/admin?}
   create!
   "Create a facility."
-  [{:keys [conn] :as ctx} {{:keys [name] :as input} :input :as args} _]
+  [{:keys [conn requester] :as ctx} {{:keys [name] :as input} :input :as args} _]
   (let [[errors] (st/validate input (validation.schema/facility (d/db conn)))]
     (if (some? errors)
       (errors/bad-request "Validation error" errors)
       (let [facility                   (facility/create input)
-            {:keys [db-after tempids]} @(d/transact conn [facility])]
+            audit-tx                   (audit/create requester)
+            {:keys [db-after tempids]} @(d/transact conn [facility audit-tx])]
         (d/entity
          db-after
          (d/resolve-tempid db-after tempids (:db/id facility)))))))

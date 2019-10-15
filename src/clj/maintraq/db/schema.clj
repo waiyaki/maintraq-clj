@@ -3,6 +3,7 @@
    [clojure.string :as str]
    [io.rkn.conformity :as conformity]
    [maintraq.db.partition]
+   [maintraq.db.schema.audit]
    [maintraq.db.schema.user]
    [maintraq.db.schema.facility]
    [maintraq.db.schema.task]
