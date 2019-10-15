@@ -38,9 +38,31 @@
   :Facility
   {:description "Object representation of a physical space, e.g. a building."
    :fields
-   {:uid {:type (non-null :UUID)
-          :description "Unique ID for this Facility as a UUID string."
-          :resolve (:get :facility/uid)}
-    :name {:type (non-null :String)
+   {:uid  {:type        (non-null :UUID)
+           :description "Unique ID for this Facility as a UUID string."
+           :resolve     (:get :facility/uid)}
+    :name {:type        (non-null :String)
            :description "Name of the Facility. Expected to be unique."
-           :resolve (:get :facility/name)}}}}}
+           :resolve     (:get :facility/name)}}}
+
+  :Task
+  {:description "A maintenance Task."
+   :fields
+   {:uid         {:type        (non-null :UUID)
+                  :description "Unique ID for this Task as a UUID string."
+                  :resolve     (:get :task/uid)}
+    :title       {:type        (non-null :String)
+                  :description "Title of this task. Short, provides overview of the task."
+                  :resolve     (:get :task/title)}
+    :description {:type        :String
+                  :description "Long form description of the maintenance task."
+                  :resolve     (:get :task/description)}
+    :status      {:type        (non-null :task_status)
+                  :description "The status of this maintenance task."
+                  :resolve     :tasks/status}
+    :requester   {:type        (non-null :User)
+                  :description "User who requested this maintenance task."
+                  :resolve     (:get :task/requester)}
+    :assignee    {:type        :User
+                  :description "User assigned to this task. This user must be a maintainer."
+                  :resolve     (:get :task/assignee)}}}}}

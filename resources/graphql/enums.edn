@@ -1,4 +1,8 @@
 {:enums
  {:role
   {:description "User account roles"
-   :values      [:admin :member :maintenance]}}}
+   :values      [:admin :member :maintenance]}
+
+  :task_status
+  {:description "Maintenance Task statuses."
+   :values      [:initial :confirmed :acknowledged :started :pending :done]}}}

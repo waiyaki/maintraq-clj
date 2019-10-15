@@ -14,4 +14,10 @@
   :facility {:type        :Facility
              :description "Query a single known facility by its name."
              :args        {:input {:type (non-null :facility_query_input)}}
-             :resolve     :facilities/retrieve}}}
+             :resolve     :facilities/retrieve}
+
+
+  ;; Tasks
+  :tasks {:type        (list :Task)
+          :description "List all Tasks."
+          :resolve     :tasks/enumerate}}}

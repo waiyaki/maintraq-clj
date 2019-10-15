@@ -10,7 +10,7 @@
   (mapv (fn [status]
           {:db/id    (db.partition/tempid :db.part/db)
            :db/ident status})
-        #{:task.status/not-started
+        #{:task.status/initial
           :task.status/confirmed
           :task.status/acknowledged
           :task.status/started

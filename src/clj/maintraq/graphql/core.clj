@@ -9,6 +9,7 @@
    [mount.core :as mount :refer [defstate]]
    [maintraq.auth.resolvers :as auth.resolvers]
    [maintraq.graphql.resolvers.facility :as facility]
+   [maintraq.graphql.resolvers.task :as task]
    [maintraq.graphql.resolvers.user :as user]))
 
 
@@ -50,7 +51,8 @@
   (apply (partial merge utility-resolvers)
          (map auth.resolvers/authorize-resolvers
                 [#'user/resolvers
-                 #'facility/resolvers])))
+                 #'facility/resolvers
+                 #'task/resolvers])))
 
 
 (defn- make-entire-schema [schema-files]

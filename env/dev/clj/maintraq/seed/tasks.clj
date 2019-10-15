@@ -11,7 +11,7 @@
   ([] (task {}))
   ([{:keys [uid title description status requester assignee] :as opts
      :or   {uid         (d/squuid)
-            status      :task.status/not-started
+            status      :task.status/initial
             title       (first (faker.lorem/sentences 6))
             description (first (faker.lorem/paragraphs))
             requester   (seed.users/user)

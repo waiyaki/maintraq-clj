@@ -31,23 +31,12 @@
 
 
 (comment
-  (def test-user (d/entity (d/db conn) [:user/username "waiyaki"]))
+  (defn activate-user [test-user]
+    @(d/transact conn [[:db/add test-user :user/activated true]])
+    @(d/transact conn [[:db/add test-user
+                        :user/password (buddy.hashers/derive "password")]])
+    (d/entity (d/db conn) test-user))
 
-  (defn set-admin-password []
-    @(d/transact conn [[:db/add [:user/username "admin"]
-                        :user/password (buddy.hashers/derive "password")]]))
-
-
-  (set-admin-password)
-
-
-  (defn activate-test-user
-    ([] (activate-test-user test-user))
-    ([t-user]
-     @(d/transact conn [{:db/id (:db/id t-user)
-                         :user/activated true}])
-     (d/entity (d/db conn) (:db/id t-user))))
-
-  (activate-test-user)
-
-)
+  (activate-user [:user/username "admin"])
+  (activate-user [:user/username "waiyaki"])
+  )
