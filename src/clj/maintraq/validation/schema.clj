@@ -15,4 +15,9 @@
 
 
 (defn facility [db]
-  {:name [st/required st/string (unique db :facility/name) [st/min-count 1]]})
+  {:name [st/required st/string (unique db :facility/name)]})
+
+
+(defn task [db]
+  {:title       [st/required st/string]
+   :description [st/string [st/min-count 10]]})

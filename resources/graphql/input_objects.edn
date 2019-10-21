@@ -44,4 +44,13 @@
   :facility_create_input
   {:description "Input fields to create a facility with."
    :fields      {:name {:type        (non-null :String)
-                        :description "Facility's unique name."}}}}}
+                        :description "Facility's unique name."}}}
+
+  ;; Tasks
+  :task_create_input
+  {:description "Input fields to create a task with."
+   :fields
+   {:title       {:type        (non-null :String)
+                  :description "Title of this task. Short, provides overview of the task."}
+    :description {:type        :String
+                  :description "Long form description of the maintenance task."}}}}}

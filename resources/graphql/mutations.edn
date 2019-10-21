@@ -4,4 +4,11 @@
   {:type        :Facility
    :description "Create a facility."
    :args        {:input {:type (non-null :facility_create_input)}}
-   :resolve     :facilities/create!}}}
+   :resolve     :facilities/create!}
+
+  ;; Tasks
+  :task_create
+  {:type        :Task
+   :description "Create a task"
+   :args        {:input {:type (non-null :task_create_input)}}
+   :resolve     :tasks/create!}}}
