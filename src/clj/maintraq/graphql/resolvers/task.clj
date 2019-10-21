@@ -43,10 +43,20 @@
          (d/resolve-tempid db-after tempids (:db/id task)))))))
 
 
+(defn ^{:authorized? auth.resolvers/authenticated?}
+  retrieve
+  "Retrieve a single facility by its unique id."
+  [{:keys [conn] :as ctx} {{:keys [uid] :as input} :input :as args} _]
+  (if-some [task (d/entity (d/db conn) [:task/uid uid])]
+    task
+    (errors/not-found "Task not found.")))
+
+
 (def resolvers
   {;; Queries
    :tasks/enumerate enumerate
    :tasks/status    status
+   :tasks/retrieve  retrieve
 
    ;; Mutations
    :tasks/create! create!})

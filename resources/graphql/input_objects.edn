@@ -53,4 +53,9 @@
    {:title       {:type        (non-null :String)
                   :description "Title of this task. Short, provides overview of the task."}
     :description {:type        :String
-                  :description "Long form description of the maintenance task."}}}}}
+                  :description "Long form description of the maintenance task."}}}
+
+  :task_query_input
+  {:description "Input fields to retrieve a task by."
+   :fields      {:uid {:type        (non-null :UUID)
+                       :description "Task's unique id as a UUID string."}}}}}

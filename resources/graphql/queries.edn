@@ -20,4 +20,9 @@
   ;; Tasks
   :tasks {:type        (list :Task)
           :description "List all Tasks."
-          :resolve     :tasks/enumerate}}}
+          :resolve     :tasks/enumerate}
+
+  :task {:type        :Task
+         :description "Retrieve a single task by its unique id."
+         :args        {:input {:type (non-null :task_query_input)}}
+         :resolve     :tasks/retrieve}}}
