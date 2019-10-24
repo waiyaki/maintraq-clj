@@ -44,7 +44,20 @@
   (true? (hashers/check password (:user/password user))))
 
 
-(defn admin?
-  "Return `true` if this user is an admin."
-  [user]
-  (= :user.role/admin (:user/role user)))
+(defn- role? [role user]
+  (= role (:user/role user)))
+
+
+(def ^{:doc "Return `true` if this user is an admin."}
+  admin?
+  (partial role? :user.role/admin))
+
+
+(def ^{:doc "Return `true` if this user is a maintenance crew member."}
+  maintenance?
+  (partial role? :user.role/maintenance))
+
+
+(def ^{:doc "Return `true` if this user is a member."}
+  member?
+  (partial role? :user.role/member))

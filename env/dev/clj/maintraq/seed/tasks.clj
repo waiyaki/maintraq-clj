@@ -29,5 +29,5 @@
   "Seed a task into Datomic."
   ([conn] (task! (task)))
   ([conn task]
-   (let [{:keys [db-after tempids]} (@d/transact conn [task])]
+   (let [{:keys [db-after tempids]} @(d/transact conn [task])]
      (d/entity db-after (d/resolve-tempid db-after tempids (first (keys tempids)))))))

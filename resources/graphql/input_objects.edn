@@ -58,4 +58,22 @@
   :task_query_input
   {:description "Input fields to retrieve a task by."
    :fields      {:uid {:type        (non-null :UUID)
-                       :description "Task's unique id as a UUID string."}}}}}
+                       :description "Task's unique id as a UUID string."}}}
+
+  :task_update_params
+  {:description "Task fields that should be updated."
+   :fields
+   {:title       {:type        :String
+                  :description "Updated task title."}
+    :description {:type        :String
+                  :description "Update task description."}
+    :status      {:type :task_status}
+    :assignee    {:type        :UUID
+                  :description "Unique ID of the task's assignee as a UUID string."}}}
+
+  :task_update_input
+  {:description "Input fields to update a task with."
+   :fields      {:uid    {:type        (non-null :UUID)
+                          :description "Unique id of the task to update as a UUID string."}
+                 :params {:type        (non-null :task_update_params)
+                          :description "Task fields that should be updated."}}}}}

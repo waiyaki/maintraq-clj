@@ -18,6 +18,14 @@
   {:name [st/required st/string (unique db :facility/name)]})
 
 
-(defn task [db]
-  {:title       [st/required st/string]
+(def task-schema
+  {:title       [st/string]
    :description [st/string [st/min-count 10]]})
+
+
+(defn task-update []
+  (update-in task-schema [:title] conj [st/min-count 1]))
+
+
+(defn task-create []
+  (update-in task-schema [:title] conj st/required))

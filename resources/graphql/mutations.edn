@@ -9,6 +9,12 @@
   ;; Tasks
   :task_create
   {:type        :Task
-   :description "Create a task"
+   :description "Create a task."
    :args        {:input {:type (non-null :task_create_input)}}
-   :resolve     :tasks/create!}}}
+   :resolve     :tasks/create!}
+
+  :task_update
+  {:type        :Task
+   :description "Update a task."
+   :args        {:input {:type (non-null :task_update_input)}}
+   :resolve     :tasks/update!}}}

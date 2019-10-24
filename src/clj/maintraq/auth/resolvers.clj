@@ -9,6 +9,14 @@
   (user/admin? requester))
 
 
+(defn maintenance? [{:keys [requester]} _ _]
+  (user/maintenance? requester))
+
+
+(defn member? [{:keys [requester]} _ _]
+  (user/member? requester))
+
+
 (defn authenticated? [{:keys [requester]} _ _]
   (some? requester))
 
