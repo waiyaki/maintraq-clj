@@ -10,7 +10,7 @@
                  [buddy/buddy-hashers "1.4.0"]
                  [buddy/buddy-sign "3.1.0"]
                  [clj-http "3.10.0"]
-                 [com.datomic/datomic-free "0.9.5697"]
+                 [com.datomic/datomic-free "0.9.5697" :exclusions [com.google.guava/guava]]
                  [com.taoensso/timbre "4.10.0"]
                  [com.walmartlabs/lacinia "0.34.0"]
                  [datomic-schema "1.3.0"]
@@ -30,20 +30,29 @@
   :main ^:skip-aot maintraq.core
   :target-path "target/%s"
 
-  :source-paths ["src/clj"]
+  :source-paths ["src/clj" "src/cljs"]
   :test-paths ["test/clj"]
   :resource-paths ["resources"]
 
   :profiles {:uberjar {:aot          :all
                        :source-paths ["env/prod/clj"]}
-             :dev     {:source-paths ["env/dev/clj"]
-                       :repl-options {:init-ns user}
-                       :plugins      [[metosin/bat-test "0.4.3"]]
-                       :dependencies [[org.clojure/tools.namespace "0.3.1"]
-                                      [org.clojure/tools.reader "1.3.2"]
-                                      [expound "0.7.2"]
-                                      [ring/ring-devel "1.7.1"]
-                                      [faker "0.2.2"]
 
-                                      ;; tests
-                                      [vincit/venia "0.2.5"]]}})
+             :dev {:source-paths ["env/dev/clj"]
+                   :repl-options {:init-ns user}
+                   :plugins      [[metosin/bat-test "0.4.3"]]
+                   :dependencies [[org.clojure/tools.namespace "0.3.1"]
+                                  [org.clojure/tools.reader "1.3.2"]
+                                  [expound "0.7.2"]
+                                  [ring/ring-devel "1.7.1"]
+                                  [faker "0.2.2"]
+
+                                  ;; tests
+                                  [vincit/venia "0.2.5"]]}
+
+             :cljs {:source-paths ["src/cljs"]
+                    :dependencies [[thheller/shadow-cljs "2.8.79"
+                                    :exclusions [com.google.code.findbugs/jsr305]]
+                                   [binaryage/devtools "0.9.11"]
+                                   [day8.re-frame/re-frame-10x "0.4.5"]
+                                   [reagent "0.9.0-rc3"]
+                                   [re-frame "0.11.0-rc3"]]}})
