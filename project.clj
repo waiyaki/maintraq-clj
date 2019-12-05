@@ -11,6 +11,7 @@
                  [buddy/buddy-sign "3.1.0"]
                  [clj-http "3.10.0"]
                  [com.datomic/datomic-free "0.9.5697" :exclusions [com.google.guava/guava]]
+                 [com.google.guava/guava "28.1-jre"]
                  [com.taoensso/timbre "4.10.0"]
                  [com.walmartlabs/lacinia "0.34.0"]
                  [datomic-schema "1.3.0"]

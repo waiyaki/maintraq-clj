@@ -31,12 +31,21 @@
 
 
 (comment
+  (require '[maintraq.seed.users :as seed.users])
+
+  (defn user [] (seed.users/user! conn (seed.users/user {:username "waiyaki"})))
+
   (defn activate-user [test-user]
     @(d/transact conn [[:db/add test-user :user/activated true]])
     @(d/transact conn [[:db/add test-user
                         :user/password (buddy.hashers/derive "password")]])
     (d/entity (d/db conn) test-user))
 
-  (activate-user [:user/username "admin"])
-  (activate-user [:user/username "waiyaki"])
-  )
+  (defn seed! []
+    (user)
+    (activate-user [:user/username "admin"])
+    (activate-user [:user/username "waiyaki"]))
+
+  (seed!)
+
+)

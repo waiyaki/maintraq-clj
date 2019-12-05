@@ -1,14 +1,14 @@
 ;; shadow-cljs configuration
 {:lein     {:profile "+cljs"}
  :nrepl    {:port 7002}
- :dev-http {8000 "public"}
+ :dev-http {8000 "resources/public"}
  :builds
  {:app {:target      :browser
-        :output-dir  "public/js"
-        :assets-path "/js"
-        :modules     {:app {:entries [maintraq.core]}}
+        :output-dir  "resources/public/js"
+        :assets-path "public/js"
+        :modules     {:app {:entries [maintraq.client.core]}}
         :dev         {:closure-defines {"re_frame.trace.trace_enabled_QMARK_" true}}
         :devtools    {:preloads   [day8.re-frame-10x.preload
                                    devtools.preload]
-                      :after-load maintraq.core/mount-root
+                      :after-load maintraq.client.core/mount-root
                       :watch-dir  "resources/public"}}}}
