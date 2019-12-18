@@ -1,4 +1,7 @@
-(ns maintraq.client.layout.views)
+(ns maintraq.client.layout.views
+  (:require
+   [reitit.frontend.easy :as rfe.easy]
+   [maintraq.client.routes.paths :as paths]))
 
 
 (defn header []
@@ -6,8 +9,8 @@
    {:aria-label "main navigation", :role :navigation}
    [:div.navbar-brand
     [:a.navbar-item
-     {:href "/"}
-     [:figure.image.is-64x64
+     {:href (rfe.easy/href paths/index)}
+     [:figure.image.is-48x48
       [:img
        {:src   "./img/logo.png"
         :style {:width      "100%"
@@ -25,17 +28,13 @@
     [:div.navbar-end
      [:div.navbar-item
       [:div.buttons
-       [:a.button.is-dark.is-outlined "Log in"]
-       [:a.button.is-dark.is-outlined [:strong "Sign up"]]]]]]])
+       [:a.button.is-dark.is-outlined {:href (rfe.easy/href paths/login)} "Log in"]
+       [:a.button.is-dark.is-outlined {:href (rfe.easy/href paths/signup)} [:strong "Sign up"]]]]]]])
 
 
-(defn app-container []
-  [:div.container.is-fluid
-   {:style {:margin-top "5rem"}}
-   [:h1.title.is-1 "Maintraq"]])
-
-
-(defn home-page []
+(defn app-container [& [children]]
   [:<>
    [header]
-   [app-container]])
+   [:div.container.is-fluid
+    {:style {:margin-top "4rem"}}
+    children]])
